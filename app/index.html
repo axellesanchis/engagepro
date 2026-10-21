@@ -684,6 +684,39 @@ function submitOpenAnswer() {
   }
 }
 
+function calculateLevel(answers) {
+  let score = 0;
+  answers.forEach((a, i) => {
+    const q = TEST_QUESTIONS[i];
+    if (q.type === 'mcq') {
+      if (a === q.correct) score++;
+    } else if (typeof a === 'string' && a.trim().split(/\s+/).length >= 10) {
+      score += 0.8;
+    } else if (typeof a === 'string' && a.trim().length > 0) {
+      score += 0.4;
+    }
+  });
+  const pct = score / TEST_QUESTIONS.length;
+  const mcqCorrect = answers.reduce((n, a, i) => TEST_QUESTIONS[i].type === 'mcq' && a === TEST_QUESTIONS[i].correct ? n + 1 : n, 0);
+  const mcqTotal = TEST_QUESTIONS.filter(q => q.type === 'mcq').length;
+  let level, labelFR;
+  if (pct >= 0.92) { level = 'C2'; labelFR = 'Maîtrise'; }
+  else if (pct >= 0.78) { level = 'C1'; labelFR = 'Avancé'; }
+  else if (pct >= 0.60) { level = 'B2'; labelFR = 'Intermédiaire avancé'; }
+  else if (pct >= 0.42) { level = 'B1'; labelFR = 'Intermédiaire'; }
+  else if (pct >= 0.22) { level = 'A2'; labelFR = 'Élémentaire'; }
+  else { level = 'A1'; labelFR = 'Débutant'; }
+  const analyses = {
+    C2: `Excellent ! Vous avez obtenu ${mcqCorrect}/${mcqTotal} aux QCM. Votre maîtrise de l'anglais professionnel est remarquable.`,
+    C1: `Très bon résultat avec ${mcqCorrect}/${mcqTotal} aux QCM. Vous maîtrisez l'anglais professionnel avec aisance.`,
+    B2: `Bon résultat avec ${mcqCorrect}/${mcqTotal} aux QCM. Vous pouvez participer à la plupart des situations professionnelles en anglais.`,
+    B1: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. Vous avez des bases solides en anglais professionnel.`,
+    A2: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. Vous avez des notions d'anglais mais le vocabulaire professionnel reste à construire.`,
+    A1: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. L'anglais professionnel est encore un territoire à explorer. Pas d'inquiétude, les progrès seront rapides avec un programme adapté.`,
+  };
+  return { level, labelFR, score: `${mcqCorrect}/${mcqTotal} aux QCM`, analysis: analyses[level] };
+}
+
 async function finishTest() {
   state.testPhase = 'analyzing';
   render();
@@ -745,7 +778,7 @@ The labelFR should be one of: Débutant (A1), Élémentaire (A2), Intermédiaire
     state.testResult = result;
     state.userLevel = result.level;
   } catch (e) {
-    const fallback = { level: 'B2', labelFR: 'Intermédiaire avancé', score: `${mcqCorrect}/${mcqTotal} aux QCM`, analysis: `Score QCM : ${mcqCorrect}/${mcqTotal}.\n\nVotre niveau estimé est B2 (intermédiaire avancé). Vous maîtrisez les bases de l'anglais professionnel mais certains points méritent d'être approfondis.\n\nPassez les modules de formation pour progresser.` };
+    const fallback = calculateLevel(answers);
     lsSetRaw(ukey('level'), fallback.level);
     lsSet(ukey('test_result'), fallback);
     state.testPhase = 'done';
