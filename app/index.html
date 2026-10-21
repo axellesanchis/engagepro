@@ -312,6 +312,47 @@
     .corrections-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--coral); }
     .corrections-content { font-size: 15px; line-height: 1.8; white-space: pre-wrap; }
 
+    .oral-mic-btn {
+      width: 72px; height: 72px; border-radius: 50%; border: none;
+      color: white; font-size: 28px; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto;
+    }
+    .oral-mic-btn:hover { transform: scale(1.05); }
+    .oral-mic-label { font-size: 13px; color: var(--slate); margin-top: 10px; font-weight: 600; text-align: center; }
+    .oral-transcript-bar {
+      display: flex; align-items: center; gap: 12px; padding-top: 12px;
+    }
+    .oral-transcript-text {
+      flex: 1; padding: 12px 16px; background: rgba(12,24,38,0.03);
+      border-radius: 12px; font-size: 14px; color: var(--slate); font-style: italic;
+    }
+    .oral-text-input {
+      flex: 0 1 300px; padding: 10px 16px; border-radius: var(--radius-pill);
+      border: 1px solid rgba(12,24,38,0.08); font-size: 14px; background: var(--surface);
+    }
+    .oral-text-input:focus { outline: none; border-color: var(--coral); }
+    .oral-topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
+    .oral-topic-btn {
+      padding: 14px 18px; border-radius: var(--radius); border: 1px solid var(--border-strong);
+      background: var(--surface); cursor: pointer; font-size: 14px; font-weight: 600;
+      color: var(--navy); text-align: left; transition: all 0.15s;
+    }
+    .oral-topic-btn:hover { border-color: var(--coral); background: rgba(232,118,74,0.03); }
+    .oral-speak-btn {
+      background: none; border: none; cursor: pointer; font-size: 13px; color: var(--slate);
+      display: flex; align-items: center; gap: 4px; padding: 2px 6px;
+      border-radius: 6px; transition: color 0.15s;
+    }
+    .oral-speak-btn:hover { color: var(--coral); }
+    .mic-overlay {
+      position: fixed; inset: 0; background: rgba(12,24,38,0.5); z-index: 10000;
+      display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+    }
+    .mic-overlay-card {
+      background: var(--surface); border-radius: 24px; padding: 40px;
+      max-width: 400px; text-align: center; font-family: var(--font);
+    }
+
     .mobile-nav {
       display: none; position: fixed; bottom: 0; left: 0; right: 0;
       background: var(--navy); padding: 8px 16px; z-index: 100;
@@ -487,6 +528,12 @@ const state = {
   emailBody: '',
   emailFeedback: null,
   emailLoading: false,
+  oralMessages: [{ role: 'assistant', text: "Hello! I'm your English speaking partner. Let's have a conversation. Pick a topic or just start talking! I'll respond out loud and correct any mistakes I hear. Ready?" }],
+  oralInput: '',
+  oralTextInput: '',
+  isOralTyping: false,
+  listeningFor: null,
+  autoSpeak: true,
 };
 
 function ukey(key) { return `ep_${state.activeUserId}_${key}`; }
@@ -524,6 +571,12 @@ function loadUserData(userId) {
   state.vocabCat = 'all';
   state.cardIndex = 0;
   state.flipped = false;
+  state.oralMessages = [{ role: 'assistant', text: "Hello! I'm your English speaking partner. Let's have a conversation. Pick a topic or just start talking! I'll respond out loud and correct any mistakes I hear. Ready?" }];
+  state.oralInput = '';
+  state.oralTextInput = '';
+  state.isOralTyping = false;
+  state.listeningFor = null;
+  state.autoSpeak = true;
 }
 
 function getActiveUser() {
@@ -573,7 +626,7 @@ if (state.activeUserId) {
 }
 
 function navigate(page) {
-  if (!state.userLevel && ['vocab','chat','sim','email','meeting','dashboard'].includes(page) && page !== 'test') {
+  if (!state.userLevel && ['vocab','chat','oral','sim','email','meeting','dashboard'].includes(page) && page !== 'test') {
     state.page = 'gate';
     state.gateTo = page;
   } else {
@@ -859,6 +912,162 @@ async function submitEmail() {
 
 function cancelEmail() { state.activeEmail = null; state.emailFeedback = null; render(); }
 
+const ORAL_TOPICS = [
+  { label: '🎯 Pitch de projet', prompt: "I'd like to practice pitching a project idea to my team." },
+  { label: '📞 Call avec un client UK', prompt: "Let's simulate a call with a UK-based client about project progress." },
+  { label: '🗣 Small talk avant une réunion', prompt: "Can we practice small talk before a business meeting?" },
+  { label: '💼 Entretien d\'embauche', prompt: "I want to practice answering interview questions for a PM role." },
+  { label: '⚡ Gérer un conflit d\'équipe', prompt: "Let's practice how to handle a disagreement with a team member professionally." },
+  { label: '📈 Présenter des résultats', prompt: "I need to practice presenting quarterly results to stakeholders." },
+  { label: '🔄 Sprint Review', prompt: "Let's simulate a sprint review where I demo completed features to stakeholders." },
+  { label: '☀ Daily Meeting', prompt: "I want to practice running a daily standup meeting." },
+];
+
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'en-US';
+  utt.rate = 0.95;
+  utt.pitch = 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = [
+    v => v.lang.startsWith('en') && v.name.includes('Natural'),
+    v => v.lang.startsWith('en') && v.name.includes('Samantha'),
+    v => v.lang.startsWith('en') && v.name.includes('Karen'),
+    v => v.lang.startsWith('en') && v.name.includes('Daniel'),
+    v => v.lang.startsWith('en') && v.name.includes('Google UK English Female'),
+    v => v.lang.startsWith('en') && v.name.includes('Google UK English Male'),
+    v => v.lang.startsWith('en-GB'),
+    v => v.lang.startsWith('en') && v.name.includes('Google'),
+    v => v.lang.startsWith('en-US'),
+    v => v.lang.startsWith('en'),
+  ];
+  let picked = null;
+  for (const fn of preferred) {
+    picked = voices.find(fn);
+    if (picked) break;
+  }
+  if (picked) utt.voice = picked;
+  window.speechSynthesis.speak(utt);
+}
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => {};
+  window.speechSynthesis.getVoices();
+}
+
+let _micAllowed = false;
+let _recognition = null;
+
+function requestMicPermission() {
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'mic-overlay';
+    const card = document.createElement('div');
+    card.className = 'mic-overlay-card';
+    card.innerHTML = `
+      <div class="gate-icon" style="margin:0 auto 20px;">🎙</div>
+      <h3 style="font-size:20px;font-weight:800;margin-bottom:8px;">Autoriser le microphone</h3>
+      <p style="font-size:15px;color:var(--slate);line-height:1.6;margin-bottom:24px;">Pour la conversation orale, l'application a besoin d'accéder à votre microphone. Cliquez sur "Autoriser" puis acceptez la demande du navigateur.</p>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button id="mic-deny" class="btn btn-outline btn-sm">Non merci</button>
+        <button id="mic-allow" class="btn btn-primary btn-sm">Autoriser</button>
+      </div>
+    `;
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+    card.querySelector('#mic-deny').onclick = () => { document.body.removeChild(overlay); resolve(false); };
+    card.querySelector('#mic-allow').onclick = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(t => t.stop());
+        document.body.removeChild(overlay);
+        resolve(true);
+      } catch (err) {
+        card.querySelector('p').textContent = "Permission refusée par le navigateur. Vérifiez les paramètres (icône cadenas dans la barre d'adresse) et rechargez la page.";
+        card.querySelector('#mic-allow').textContent = 'Réessayer';
+      }
+    };
+  });
+}
+
+async function toggleMic(inputKey) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    alert("La reconnaissance vocale n'est pas supportée par votre navigateur. Utilisez Chrome ou Edge.");
+    return;
+  }
+  if (_recognition) {
+    _recognition.stop();
+    _recognition = null;
+    state.listeningFor = null;
+    render();
+    return;
+  }
+  if (!_micAllowed) {
+    const allowed = await requestMicPermission();
+    if (!allowed) return;
+    _micAllowed = true;
+  }
+  const recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.continuous = true;
+  recognition.maxAlternatives = 1;
+  _recognition = recognition;
+  state.listeningFor = inputKey;
+  render();
+  recognition.onresult = (e) => {
+    let transcript = '';
+    for (let i = 0; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript;
+    }
+    state[inputKey] = transcript;
+    render();
+  };
+  recognition.onend = () => { _recognition = null; state.listeningFor = null; render(); };
+  recognition.onerror = (e) => {
+    _recognition = null; state.listeningFor = null; render();
+    if (e.error === 'not-allowed') { _micAllowed = false; }
+  };
+  recognition.start();
+}
+
+async function sendOralMessage(input) {
+  if (!input || !input.trim()) return;
+  const userMsg = { role: 'user', text: input };
+  state.oralMessages.push(userMsg);
+  state.oralInput = '';
+  state.oralTextInput = '';
+  state.isOralTyping = true;
+  render();
+  scrollChat('oral-messages');
+  try {
+    const system = "You are a friendly English conversation partner for a French digital project manager (e-commerce). Have natural spoken-style conversations. Keep your responses conversational and not too long (2-4 sentences usually). After each response, if the user made pronunciation-suggestive errors (wrong word choice, awkward phrasing, grammar mistakes), add a correction prefixed with '✏ Correction:' with the better phrasing and a brief tip. Be encouraging and keep the conversation flowing naturally. Speak only English.";
+    const response = await aiChat(system, state.oralMessages, 1024);
+    const msgs = parseChatResponse(response);
+    state.oralMessages.push(...msgs);
+    if (state.autoSpeak) {
+      const mainText = msgs.find(m => !m.isCorrection);
+      if (mainText) speakText(mainText.text);
+    }
+    state.conversationCount++;
+    lsSetRaw(ukey('convos'), state.conversationCount.toString());
+  } catch (e) {
+    state.oralMessages.push({ role: 'assistant', text: 'Sorry, there was an error. Please try again.' });
+  }
+  state.isOralTyping = false;
+  render();
+  scrollChat('oral-messages');
+}
+
+function resetOral() {
+  state.oralMessages = [{ role: 'assistant', text: "Hello! I'm your English speaking partner. Let's have a conversation. Pick a topic or just start talking! I'll respond out loud and correct any mistakes I hear. Ready?" }];
+  state.oralInput = '';
+  state.oralTextInput = '';
+  render();
+}
+
 function scrollChat(id) {
   setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollTop = el.scrollHeight; }, 50);
 }
@@ -925,6 +1134,7 @@ function renderSidebar() {
     { id: 'dashboard', icon: '◻', label: 'Dashboard' },
     { id: 'vocab', icon: '◆', label: 'Vocabulaire' },
     { id: 'chat', icon: '●', label: 'Conversation' },
+    { id: 'oral', icon: '🎙', label: 'Conversation orale' },
     { id: 'sim', icon: '▲', label: 'Simulations' },
     { id: 'email', icon: '✉', label: 'Emails' },
     { id: 'meeting', icon: '■', label: 'Réunions' },
@@ -986,6 +1196,7 @@ function renderMain() {
   else if (p === 'vocab') html = renderVocabPage();
   else if (p === 'meeting') html = renderMeetings();
   else if (p === 'chat') html = renderChatPage();
+  else if (p === 'oral') html = renderOralPage();
   else if (p === 'sim') html = renderSimPage();
   else if (p === 'email') html = renderEmailPage();
   else if (p === 'profile') html = renderProfile();
@@ -1111,6 +1322,11 @@ function renderDashboard() {
         <h3 class="card-title">Conversation libre</h3>
         <p class="card-desc">Discutez en anglais avec un agent IA qui corrige vos erreurs.</p>
       </div>
+      <div class="card" style="cursor:pointer;" onclick="navigate('oral')">
+        <div class="card-icon">🎙</div>
+        <h3 class="card-title">Conversation orale</h3>
+        <p class="card-desc">Parlez en anglais avec l'IA qui vous écoute, répond à voix haute et corrige.</p>
+      </div>
       <div class="card" style="cursor:pointer;" onclick="navigate('sim')">
         <div class="card-icon">▲</div>
         <h3 class="card-title">Simulations pro</h3>
@@ -1218,6 +1434,60 @@ function renderChatPage() {
     <div class="chat-input-bar">
       <input class="chat-input" type="text" placeholder="Écrivez en anglais…" value="${esc(state.chatInput)}" oninput="state.chatInput=this.value" onkeydown="handleChatKey(event, sendChatMessage)">
       <button class="btn btn-primary" onclick="sendChatMessage()">Envoyer</button>
+    </div>
+  </div>`;
+}
+
+function renderOralPage() {
+  const showTopics = state.oralMessages.length <= 1;
+  const showReset = state.oralMessages.length > 1;
+  const isListening = state.listeningFor === 'oralInput';
+  const micBg = isListening ? '#EF4444' : 'var(--navy)';
+  const micShadow = isListening ? 'rgba(239,68,68,0.3)' : 'rgba(12,24,38,0.2)';
+  const micLabel = isListening ? 'Écoute en cours…' : 'Appuyez pour parler';
+  const hasTranscript = !!state.oralInput;
+
+  const msgs = state.oralMessages.map((m, idx) => {
+    const isUser = m.role === 'user';
+    const speakBtn = (!isUser && !m.isCorrection) ? `<button class="oral-speak-btn" onclick="speakText(state.oralMessages[${idx}].text)">🔊 Écouter</button>` : '';
+    if (m.isCorrection) return `<div class="chat-bubble chat-bubble-correction"><p class="chat-correction-label">✏ Correction</p>${esc(m.text)}</div>`;
+    return `<div>
+      <div class="chat-bubble ${isUser ? 'chat-bubble-user' : 'chat-bubble-ai'}">${esc(m.text)}</div>
+      ${speakBtn}
+    </div>`;
+  }).join('');
+
+  const typing = state.isOralTyping ? '<div class="chat-typing"><span>Typing…</span></div>' : '';
+
+  const topicsHtml = showTopics ? `<div class="oral-topics">
+    ${ORAL_TOPICS.map((t, i) => `<button class="oral-topic-btn" onclick="sendOralMessage(ORAL_TOPICS[${i}].prompt)">${t.label}</button>`).join('')}
+  </div>` : '';
+
+  const resetBtn = showReset ? `<button class="btn btn-outline btn-sm" onclick="resetOral()">← Changer de sujet</button>` : '';
+
+  return `<div class="chat-container">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h1 class="page-title">Conversation orale</h1>
+        <p class="page-subtitle">Parlez en anglais — l'agent vous écoute, répond à voix haute et corrige</p>
+      </div>
+      ${resetBtn}
+    </div>
+    ${topicsHtml}
+    <div class="chat-messages" id="oral-messages">${msgs}${typing}</div>
+    <div style="padding-top:16px;border-top:1px solid var(--border);">
+      <div style="text-align:center;padding:12px 0;">
+        <button class="oral-mic-btn" style="background:${micBg};box-shadow:0 4px 20px ${micShadow};" onclick="toggleMic('oralInput')">🎙</button>
+        <p class="oral-mic-label">${micLabel}</p>
+      </div>
+      ${hasTranscript ? `<div class="oral-transcript-bar">
+        <div class="oral-transcript-text">${esc(state.oralInput)}</div>
+        <button class="btn btn-primary btn-sm" onclick="sendOralMessage(state.oralInput)">Envoyer</button>
+      </div>` : ''}
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+        <input class="oral-text-input" type="text" placeholder="Tapez votre réponse…" value="${esc(state.oralTextInput)}" oninput="state.oralTextInput=this.value" onkeydown="if(event.key==='Enter'){event.preventDefault();sendOralMessage(state.oralTextInput);}">
+        <button class="btn btn-primary btn-sm" onclick="sendOralMessage(state.oralTextInput)">→</button>
+      </div>
     </div>
   </div>`;
 }
