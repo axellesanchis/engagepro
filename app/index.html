@@ -353,31 +353,142 @@
       max-width: 400px; text-align: center; font-family: var(--font);
     }
 
-    .mobile-nav {
-      display: none; position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--navy); padding: 8px 16px; z-index: 100;
-      justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1);
+    .mobile-header {
+      display: none; position: fixed; top: 0; left: 0; right: 0;
+      background: var(--navy); padding: 0 16px; height: 56px; z-index: 200;
+      align-items: center; justify-content: space-between;
     }
-    .mobile-nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      background: none; border: none; cursor: pointer; padding: 8px 12px;
-      color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600;
-      border-radius: 8px; transition: all 0.15s;
+    .mobile-header-logo { display: flex; align-items: center; gap: 8px; }
+    .mobile-header-logo-icon {
+      width: 30px; height: 30px; background: var(--coral); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 900; font-size: 13px;
     }
-    .mobile-nav-item.active { color: var(--coral); }
-    .mobile-nav-item span:first-child { font-size: 20px; }
+    .mobile-header-logo-text { font-weight: 700; font-size: 16px; color: white; }
+    .burger-btn {
+      background: none; border: none; cursor: pointer; padding: 8px;
+      display: flex; flex-direction: column; gap: 5px; width: 36px;
+    }
+    .burger-btn span {
+      display: block; height: 2px; background: white; border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .burger-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .burger-btn.open span:nth-child(2) { opacity: 0; }
+    .burger-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .mobile-drawer {
+      display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+      z-index: 199;
+    }
+    .mobile-drawer.open { display: flex; flex-direction: column; }
+    .mobile-drawer-overlay {
+      position: absolute; inset: 0; background: rgba(12,24,38,0.4);
+    }
+    .mobile-drawer-content {
+      position: relative; background: var(--navy); padding: 16px;
+      display: flex; flex-direction: column; gap: 4px; overflow-y: auto;
+      max-height: calc(100vh - 56px); box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .mobile-drawer-user {
+      display: flex; align-items: center; gap: 12px; padding: 14px;
+      border-radius: var(--radius-sm); margin-bottom: 8px;
+      background: rgba(255,255,255,0.05);
+    }
+    .mobile-drawer-user-avatar {
+      width: 36px; height: 36px; background: var(--coral); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 800; font-size: 14px; flex-shrink: 0;
+    }
+    .mobile-drawer-user-name { font-size: 14px; font-weight: 600; color: white; }
+    .mobile-drawer-user-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .mobile-drawer-item {
+      display: flex; align-items: center; gap: 12px; padding: 14px;
+      border-radius: var(--radius-sm); border: none; cursor: pointer;
+      font-size: 15px; font-weight: 600; text-align: left; width: 100%;
+      transition: all 0.15s; background: transparent; color: rgba(255,255,255,0.6);
+      font-family: var(--font);
+    }
+    .mobile-drawer-item:hover { background: rgba(255,255,255,0.05); color: white; }
+    .mobile-drawer-item.active { background: rgba(232,118,74,0.15); color: var(--coral); }
+    .mobile-drawer-item-icon { font-size: 18px; width: 24px; text-align: center; }
+    .mobile-drawer-level {
+      padding: 14px; background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-sm); margin-top: 8px;
+    }
+    .mobile-drawer-back {
+      display: flex; align-items: center; gap: 8px; padding: 14px;
+      color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 600;
+      text-decoration: none; border-radius: var(--radius-sm); margin-top: 4px;
+    }
 
     @media (max-width: 768px) {
       .sidebar { display: none; }
-      .mobile-nav { display: flex; }
-      .main { padding: 20px 16px 80px; }
-      .page-title { font-size: 24px; }
-      .flashcard { padding: 32px 20px; min-height: 200px; }
-      .flashcard-en { font-size: 24px; }
-      .test-card { padding: 24px; }
-      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .mobile-header { display: flex; }
+      .app { flex-direction: column; }
+      .main { padding: 72px 16px 24px; height: 100vh; overflow-y: auto; }
+      .page-title { font-size: 22px; }
+      .page-subtitle { font-size: 13px; }
+      .flashcard { padding: 28px 16px; min-height: 180px; }
+      .flashcard-en { font-size: 22px; }
+      .flashcard-fr { font-size: 18px; }
+      .flashcard-example { font-size: 13px; }
+      .flashcard-actions { gap: 8px; }
+      .flashcard-actions .btn { padding: 8px 14px; font-size: 13px; }
+      .test-card { padding: 20px; }
+      .test-result-hero { padding: 32px 20px; }
+      .test-result-level { font-size: 48px; }
+      .test-result-label { font-size: 16px; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat-card { padding: 16px; }
+      .stat-value { font-size: 24px; }
+      .stat-label { font-size: 12px; }
       .card-grid { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+      .card-title { font-size: 15px; }
+      .card-desc { font-size: 13px; }
       .profile-header { flex-direction: column; text-align: center; }
+      .profile-avatar { width: 64px; height: 64px; font-size: 22px; }
+      .profile-name { font-size: 22px; }
+      .chat-container { height: calc(100vh - 140px); }
+      .chat-bubble { max-width: 88%; padding: 12px 16px; font-size: 14px; }
+      .chat-input-bar { gap: 8px; }
+      .chat-input { padding: 12px 16px; font-size: 14px; }
+      .chat-input-bar .btn { padding: 12px 18px; font-size: 14px; }
+      .sim-header { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+      .sim-header-title { font-size: 15px; }
+      .email-brief { padding: 16px; }
+      .email-brief-text { font-size: 14px; }
+      .email-editor { border-radius: 14px; }
+      .email-field { padding: 10px 16px; }
+      .email-body { padding: 16px; min-height: 160px; font-size: 14px; }
+      .email-feedback { padding: 20px; font-size: 14px; }
+      .meeting-card { padding: 20px; }
+      .meeting-card h3 { font-size: 16px; }
+      .meeting-phrase { padding: 10px 12px; }
+      .meeting-phrase-en { font-size: 13px; }
+      .meeting-phrase-fr { font-size: 12px; }
+      .vocab-grid { grid-template-columns: 1fr; }
+      .vocab-item { padding: 14px 16px; }
+      .filter-bar { gap: 6px; }
+      .filter-btn { padding: 8px 14px; font-size: 13px; }
+      .oral-topics { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .oral-topic-btn { padding: 12px 14px; font-size: 13px; }
+      .oral-mic-btn { width: 60px; height: 60px; font-size: 24px; }
+      .oral-text-input { flex: 1; }
+      .gate-screen { margin: 40px auto; padding: 0 16px; }
+      .gate-icon { width: 56px; height: 56px; font-size: 24px; }
+      .corrections-section { padding: 20px; }
+      .session-box { padding: 28px 20px; }
+      .session-title { font-size: 24px; }
+      .btn { padding: 12px 22px; font-size: 14px; }
+      .btn-sm { padding: 9px 16px; font-size: 13px; }
+      .test-nav-bar { margin-top: 16px; }
+    }
+
+    @media (max-width: 380px) {
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .oral-topics { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -528,6 +639,7 @@ const state = {
   emailBody: '',
   emailFeedback: null,
   emailLoading: false,
+  menuOpen: false,
   oralMessages: [{ role: 'assistant', text: "Hello! I'm your English speaking partner. Let's have a conversation. Pick a topic or just start talking! I'll respond out loud and correct any mistakes I hear. Ready?" }],
   oralInput: '',
   oralTextInput: '',
@@ -633,6 +745,7 @@ function navigate(page) {
     state.page = page;
   }
   if (page === 'vocab') { state.cardIndex = 0; state.flipped = false; }
+  state.menuOpen = false;
   render();
   const mainEl = document.getElementById('main');
   if (mainEl) mainEl.scrollTop = 0;
@@ -945,6 +1058,9 @@ async function submitEmail() {
 
 function cancelEmail() { state.activeEmail = null; state.emailFeedback = null; render(); }
 
+function toggleMenu() { state.menuOpen = !state.menuOpen; render(); }
+function closeMenu() { state.menuOpen = false; }
+
 const ORAL_TOPICS = [
   { label: '🎯 Pitch de projet', prompt: "I'd like to practice pitching a project idea to my team." },
   { label: '📞 Call avec un client UK', prompt: "Let's simulate a call with a UK-based client about project progress." },
@@ -1206,18 +1322,37 @@ function renderSidebar() {
     <a href="/" class="sidebar-back">← Retour au site</a>
   `;
 
-  const mobileItems = [
-    { id: 'dashboard', icon: '◻', label: 'Accueil' },
-    { id: 'vocab', icon: '◆', label: 'Vocab' },
-    { id: 'test', icon: '✦', label: 'Test' },
-    { id: 'meeting', icon: '■', label: 'Réunions' },
-    { id: 'sim', icon: '▲', label: 'Plus' },
-  ];
-  document.getElementById('mobile-nav').innerHTML = mobileItems.map(it => `
-    <button class="mobile-nav-item ${state.page === it.id ? 'active' : ''}" onclick="navigate('${it.id}')">
-      <span>${it.icon}</span>${it.label}
-    </button>
-  `).join('');
+  const mobileHeader = document.getElementById('mobile-header');
+  if (mobileHeader) {
+    const drawerEl = document.getElementById('mobile-drawer');
+    if (drawerEl) {
+      drawerEl.className = 'mobile-drawer' + (state.menuOpen ? ' open' : '');
+      drawerEl.innerHTML = `
+        <div class="mobile-drawer-overlay" onclick="toggleMenu()"></div>
+        <div class="mobile-drawer-content">
+          <button class="mobile-drawer-user" onclick="navigate('profile')">
+            <div class="mobile-drawer-user-avatar">${esc(userInitials)}</div>
+            <div>
+              <p class="mobile-drawer-user-name">${esc(userFullName)}</p>
+              <p class="mobile-drawer-user-sub">Mon profil</p>
+            </div>
+          </button>
+          ${items.map(it => `
+            <button class="mobile-drawer-item ${state.page === it.id ? 'active' : ''}" onclick="navigate('${it.id}')">
+              <span class="mobile-drawer-item-icon">${it.icon}</span> ${it.label}
+            </button>
+          `).join('')}
+          <div class="mobile-drawer-level">
+            <p class="sidebar-level-label">Niveau actuel</p>
+            <p class="sidebar-level-value">${esc(levelText)}</p>
+          </div>
+          <a href="/" class="mobile-drawer-back">← Retour au site</a>
+        </div>
+      `;
+    }
+    const burgerBtn = mobileHeader.querySelector('.burger-btn');
+    if (burgerBtn) burgerBtn.className = 'burger-btn' + (state.menuOpen ? ' open' : '');
+  }
 }
 
 function renderMain() {
@@ -1596,10 +1731,19 @@ function render() {
     return;
   }
   root.innerHTML = `
+    <header class="mobile-header" id="mobile-header">
+      <div class="mobile-header-logo">
+        <div class="mobile-header-logo-icon">E</div>
+        <span class="mobile-header-logo-text">EngagePro</span>
+      </div>
+      <button class="burger-btn" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+    <div class="mobile-drawer" id="mobile-drawer"></div>
     <div class="app">
       <nav class="sidebar" id="sidebar"></nav>
       <main class="main" id="main"></main>
-      <nav class="mobile-nav" id="mobile-nav"></nav>
     </div>
   `;
   renderSidebar();
