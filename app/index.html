@@ -61,6 +61,19 @@
     .sidebar-level-fill { background: var(--coral); height: 100%; border-radius: var(--radius-pill); transition: width 0.5s; }
     .sidebar-back { display: flex; align-items: center; gap: 8px; padding: 12px 14px; color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 12px; border-radius: var(--radius-sm); transition: all 0.15s; }
     .sidebar-back:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+      border-radius: var(--radius-sm); cursor: pointer; margin-bottom: 12px;
+      transition: all 0.15s; background: rgba(255,255,255,0.05); border: none; width: 100%; text-align: left;
+    }
+    .sidebar-user:hover { background: rgba(255,255,255,0.1); }
+    .sidebar-user-avatar {
+      width: 36px; height: 36px; background: var(--coral); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 800; font-size: 14px; flex-shrink: 0;
+    }
+    .sidebar-user-name { font-size: 14px; font-weight: 600; color: white; }
+    .sidebar-user-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
 
     .main { flex: 1; overflow-y: auto; padding: 32px 40px; }
     .page { display: none; animation: fadeIn 0.4s ease both; }
@@ -95,6 +108,8 @@
     .btn-outline:hover { background: var(--navy); color: white; border-color: var(--navy); }
     .btn-sm { padding: 10px 20px; font-size: 14px; }
     .btn-ghost { background: transparent; color: var(--slate); padding: 10px 20px; font-size: 14px; font-weight: 600; }
+    .btn-danger { background: rgba(239,68,68,0.1); color: #EF4444; }
+    .btn-danger:hover { background: rgba(239,68,68,0.2); }
 
     .tag { display: inline-flex; padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; }
     .tag-coral { background: var(--coral-light); color: var(--coral); }
@@ -225,6 +240,78 @@
       margin: 0 auto 24px; font-size: 28px;
     }
 
+    .session-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 20px; background: var(--mist);
+    }
+    .session-box {
+      background: var(--surface); border-radius: 28px; padding: 48px;
+      max-width: 480px; width: 100%; border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(12,24,38,0.06);
+    }
+    .session-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; text-align: center; }
+    .session-subtitle { font-size: 15px; color: var(--slate); text-align: center; margin-bottom: 36px; }
+    .session-profiles { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .session-profile-btn {
+      display: flex; align-items: center; gap: 14px; padding: 16px 20px;
+      border-radius: var(--radius); border: 2px solid var(--border-strong);
+      background: var(--surface); cursor: pointer; transition: all 0.15s; width: 100%;
+      text-align: left;
+    }
+    .session-profile-btn:hover { border-color: var(--coral); background: rgba(232,118,74,0.03); }
+    .session-profile-avatar {
+      width: 44px; height: 44px; background: var(--coral); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 800; font-size: 16px; flex-shrink: 0;
+    }
+    .session-profile-name { font-size: 16px; font-weight: 700; }
+    .session-profile-level { font-size: 13px; color: var(--slate); margin-top: 2px; }
+    .session-divider {
+      text-align: center; color: var(--slate); font-size: 13px; font-weight: 600;
+      margin: 24px 0; position: relative;
+    }
+    .session-divider::before, .session-divider::after {
+      content: ''; position: absolute; top: 50%; height: 1px;
+      background: var(--border-strong); width: calc(50% - 40px);
+    }
+    .session-divider::before { left: 0; }
+    .session-divider::after { right: 0; }
+    .session-form { display: flex; flex-direction: column; gap: 12px; }
+    .session-input {
+      padding: 14px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong);
+      font-size: 15px; color: var(--navy); background: var(--surface); transition: border-color 0.2s;
+    }
+    .session-input:focus { outline: none; border-color: var(--coral); }
+
+    .profile-header {
+      display: flex; align-items: center; gap: 24px; margin-bottom: 40px;
+    }
+    .profile-avatar {
+      width: 80px; height: 80px; background: var(--coral); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 900; font-size: 28px; flex-shrink: 0;
+    }
+    .profile-name { font-size: 28px; font-weight: 900; }
+    .profile-level { font-size: 16px; color: var(--slate); margin-top: 4px; }
+
+    .test-nav-bar {
+      display: flex; justify-content: space-between; align-items: center; margin-top: 24px;
+    }
+    .test-back-btn {
+      background: none; border: none; cursor: pointer; font-size: 14px;
+      font-weight: 600; color: var(--slate); display: flex; align-items: center; gap: 6px;
+      transition: color 0.15s; padding: 8px 0;
+    }
+    .test-back-btn:hover { color: var(--navy); }
+    .test-back-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .corrections-section {
+      background: var(--surface); border-radius: 20px; padding: 28px;
+      border: 1px solid var(--border); margin-bottom: 24px;
+    }
+    .corrections-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--coral); }
+    .corrections-content { font-size: 15px; line-height: 1.8; white-space: pre-wrap; }
+
     .mobile-nav {
       display: none; position: fixed; bottom: 0; left: 0; right: 0;
       background: var(--navy); padding: 8px 16px; z-index: 100;
@@ -249,6 +336,7 @@
       .test-card { padding: 24px; }
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
       .card-grid { grid-template-columns: 1fr; }
+      .profile-header { flex-direction: column; text-align: center; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -257,11 +345,7 @@
   </style>
 </head>
 <body>
-  <div class="app" id="app">
-    <nav class="sidebar" id="sidebar"></nav>
-    <main class="main" id="main"></main>
-    <nav class="mobile-nav" id="mobile-nav"></nav>
-  </div>
+  <div id="root"></div>
 
 <script>
 const VOCAB = [
@@ -364,25 +448,32 @@ function ls(key, fallback) {
   try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
   catch { return fallback; }
 }
+function lsRaw(key) { try { return localStorage.getItem(key); } catch { return null; } }
 function lsSet(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+function lsSetRaw(key, val) { try { localStorage.setItem(key, val); } catch {} }
+function lsRemove(key) { try { localStorage.removeItem(key); } catch {} }
 
 const state = {
-  page: ls('ep_level', null) ? 'dashboard' : 'test',
-  testPhase: ls('ep_level', null) ? 'done' : 'idle',
+  activeUserId: lsRaw('ep_active_user'),
+  users: ls('ep_users', []),
+  newFirstName: '',
+  newLastName: '',
+  page: 'dashboard',
+  testPhase: 'idle',
   testIndex: 0,
   testAnswers: [],
   testOpenAnswer: '',
-  testResult: ls('ep_test_result', null),
-  userLevel: ls('ep_level', null),
+  testSelected: null,
+  testResult: null,
+  userLevel: null,
   vocabCat: 'all',
   cardIndex: 0,
   flipped: false,
-  learnedWords: ls('ep_learned', []),
-  hardWords: ls('ep_hard', []),
-  wordsLearned: ls('ep_learned', []).length,
-  conversationCount: ls('ep_convos', 0),
-  emailsWritten: ls('ep_emails', 0),
-  simsCompleted: ls('ep_sims', 0),
+  learnedWords: [],
+  hardWords: [],
+  conversationCount: 0,
+  emailsWritten: 0,
+  simsCompleted: 0,
   chatMessages: [{ role: 'assistant', text: "Hi! I'm your English practice partner. I'm here to help you improve your professional English. Talk to me about anything related to e-commerce, project management, or digital topics. I'll correct your mistakes and suggest better phrasing. Let's start — tell me about your last project!" }],
   chatInput: '',
   isTyping: false,
@@ -398,6 +489,89 @@ const state = {
   emailLoading: false,
 };
 
+function ukey(key) { return `ep_${state.activeUserId}_${key}`; }
+
+function loadUserData(userId) {
+  const uk = (k) => `ep_${userId}_${k}`;
+  const level = lsRaw(uk('level'));
+  const testResult = ls(uk('test_result'), null);
+  state.activeUserId = userId;
+  state.page = level ? 'dashboard' : 'test';
+  state.userLevel = level;
+  state.testResult = testResult;
+  state.testPhase = testResult ? 'done' : 'idle';
+  state.testIndex = 0;
+  state.testAnswers = [];
+  state.testSelected = null;
+  state.testOpenAnswer = '';
+  state.learnedWords = ls(uk('learned'), []);
+  state.hardWords = ls(uk('hard'), []);
+  state.conversationCount = parseInt(lsRaw(uk('convos')) || '0', 10);
+  state.emailsWritten = parseInt(lsRaw(uk('emails')) || '0', 10);
+  state.simsCompleted = parseInt(lsRaw(uk('sims')) || '0', 10);
+  state.chatMessages = [{ role: 'assistant', text: "Hi! I'm your English practice partner. I'm here to help you improve your professional English. Talk to me about anything related to e-commerce, project management, or digital topics. I'll correct your mistakes and suggest better phrasing. Let's start — tell me about your last project!" }];
+  state.chatInput = '';
+  state.isTyping = false;
+  state.activeSim = null;
+  state.simMessages = [];
+  state.simInput = '';
+  state.isSimTyping = false;
+  state.activeEmail = null;
+  state.emailTo = '';
+  state.emailSubject = '';
+  state.emailBody = '';
+  state.emailFeedback = null;
+  state.vocabCat = 'all';
+  state.cardIndex = 0;
+  state.flipped = false;
+}
+
+function getActiveUser() {
+  return state.users.find(u => u.id === state.activeUserId) || null;
+}
+
+function createProfile() {
+  const fn = state.newFirstName.trim();
+  const ln = state.newLastName.trim();
+  if (!fn || !ln) return;
+  const id = 'u' + Date.now();
+  const users = [...state.users, { id, firstName: fn, lastName: ln }];
+  lsSet('ep_users', users);
+  lsSetRaw('ep_active_user', id);
+  state.users = users;
+  state.newFirstName = '';
+  state.newLastName = '';
+  loadUserData(id);
+  render();
+}
+
+function loginProfile(userId) {
+  lsSetRaw('ep_active_user', userId);
+  loadUserData(userId);
+  render();
+}
+
+function switchProfile() {
+  lsRemove('ep_active_user');
+  state.activeUserId = null;
+  render();
+}
+
+function deleteProfile() {
+  const uid = state.activeUserId;
+  const users = state.users.filter(u => u.id !== uid);
+  lsSet('ep_users', users);
+  lsRemove('ep_active_user');
+  ['level','test_result','learned','hard','convos','emails','sims'].forEach(k => lsRemove(`ep_${uid}_${k}`));
+  state.users = users;
+  state.activeUserId = null;
+  render();
+}
+
+if (state.activeUserId) {
+  loadUserData(state.activeUserId);
+}
+
 function navigate(page) {
   if (!state.userLevel && ['vocab','chat','sim','email','meeting','dashboard'].includes(page) && page !== 'test') {
     state.page = 'gate';
@@ -407,7 +581,8 @@ function navigate(page) {
   }
   if (page === 'vocab') { state.cardIndex = 0; state.flipped = false; }
   render();
-  document.getElementById('main').scrollTop = 0;
+  const mainEl = document.getElementById('main');
+  if (mainEl) mainEl.scrollTop = 0;
 }
 
 function getFilteredVocab() {
@@ -416,57 +591,31 @@ function getFilteredVocab() {
   return VOCAB.filter(w => w.cat === map[state.vocabCat]);
 }
 
-function calculateLevel(answers) {
-  let score = 0;
-  answers.forEach((a, i) => {
-    const q = TEST_QUESTIONS[i];
-    if (q.type === 'mcq') {
-      if (a === q.correct) score++;
-    } else if (typeof a === 'string' && a.trim().split(/\s+/).length >= 10) {
-      score += 0.8;
-    } else if (typeof a === 'string' && a.trim().length > 0) {
-      score += 0.4;
-    }
-  });
-  const pct = score / TEST_QUESTIONS.length;
-  const mcqCorrect = answers.reduce((n, a, i) => TEST_QUESTIONS[i].type === 'mcq' && a === TEST_QUESTIONS[i].correct ? n + 1 : n, 0);
-  const mcqTotal = TEST_QUESTIONS.filter(q => q.type === 'mcq').length;
-
-  let level, labelFR;
-  if (pct >= 0.92) { level = 'C2'; labelFR = 'Maîtrise'; }
-  else if (pct >= 0.78) { level = 'C1'; labelFR = 'Avancé'; }
-  else if (pct >= 0.60) { level = 'B2'; labelFR = 'Intermédiaire avancé'; }
-  else if (pct >= 0.42) { level = 'B1'; labelFR = 'Intermédiaire'; }
-  else if (pct >= 0.22) { level = 'A2'; labelFR = 'Élémentaire'; }
-  else { level = 'A1'; labelFR = 'Débutant'; }
-
-  const analyses = {
-    C2: `Excellent ! Vous avez obtenu ${mcqCorrect}/${mcqTotal} aux QCM. Votre maîtrise de l'anglais professionnel est remarquable. Vous utilisez un vocabulaire précis et varié, avec des structures grammaticales complexes. Continuez à pratiquer pour maintenir ce niveau d'excellence.`,
-    C1: `Très bon résultat avec ${mcqCorrect}/${mcqTotal} aux QCM. Vous maîtrisez l'anglais professionnel avec aisance. Votre vocabulaire métier est solide et vous savez communiquer avec nuance. Quelques points de perfectionnement restent possibles, notamment sur les formulations les plus avancées.`,
-    B2: `Bon résultat avec ${mcqCorrect}/${mcqTotal} aux QCM. Vous pouvez participer à la plupart des situations professionnelles en anglais. Votre vocabulaire métier est correct mais pourrait être enrichi. Travaillez les structures complexes et les formulations diplomatiques pour passer au niveau supérieur.`,
-    B1: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. Vous avez des bases solides en anglais professionnel. Vous comprenez les termes courants mais certaines expressions métier vous échappent encore. Concentrez-vous sur le vocabulaire spécifique e-commerce/digital et la pratique orale.`,
-    A2: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. Vous avez des notions d'anglais mais le vocabulaire professionnel reste à construire. Commencez par les termes les plus fréquents de votre métier et pratiquez des échanges simples avant de passer aux situations complexes.`,
-    A1: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. L'anglais professionnel est encore un territoire à explorer. Pas d'inquiétude : avec un programme adapté, les progrès seront rapides. Commencez par le vocabulaire de base et les expressions essentielles du quotidien professionnel.`,
-  };
-
-  return {
-    level, labelFR,
-    score: `${mcqCorrect}/${mcqTotal} aux QCM`,
-    analysis: analyses[level],
-  };
-}
-
 function selectAnswer(i) {
   state.testAnswers[state.testIndex] = i;
+  state.testSelected = i;
   render();
-  setTimeout(() => {
-    if (state.testIndex < TEST_QUESTIONS.length - 1) {
-      state.testIndex++;
-      render();
-    } else {
-      finishTest();
-    }
-  }, 400);
+}
+
+function nextMCQ() {
+  if (state.testIndex < TEST_QUESTIONS.length - 1) {
+    state.testIndex++;
+    state.testSelected = state.testAnswers[state.testIndex] ?? null;
+    state.testOpenAnswer = typeof state.testAnswers[state.testIndex] === 'string' ? state.testAnswers[state.testIndex] : '';
+    render();
+  } else {
+    finishTest();
+  }
+}
+
+function goBackQuestion() {
+  if (state.testIndex <= 0) return;
+  state.testIndex--;
+  const prevAnswer = state.testAnswers[state.testIndex];
+  const prevQ = TEST_QUESTIONS[state.testIndex];
+  state.testSelected = prevQ.type === 'mcq' ? (prevAnswer ?? null) : null;
+  state.testOpenAnswer = prevQ.type === 'open' ? (prevAnswer || '') : '';
+  render();
 }
 
 function submitOpenAnswer() {
@@ -474,20 +623,82 @@ function submitOpenAnswer() {
   state.testAnswers[state.testIndex] = state.testOpenAnswer;
   if (state.testIndex < TEST_QUESTIONS.length - 1) {
     state.testIndex++;
-    state.testOpenAnswer = '';
+    state.testSelected = state.testAnswers[state.testIndex] ?? null;
+    state.testOpenAnswer = typeof state.testAnswers[state.testIndex] === 'string' ? state.testAnswers[state.testIndex] : '';
     render();
   } else {
     finishTest();
   }
 }
 
-function finishTest() {
-  const result = calculateLevel(state.testAnswers);
-  state.testResult = result;
-  state.userLevel = result.level;
-  state.testPhase = 'done';
-  lsSet('ep_level', result.level);
-  lsSet('ep_test_result', result);
+async function finishTest() {
+  state.testPhase = 'analyzing';
+  render();
+
+  const answers = state.testAnswers;
+  let mcqCorrect = 0;
+  const mcqTotal = TEST_QUESTIONS.filter(q => q.type === 'mcq').length;
+  const openAnswers = [];
+
+  answers.forEach((a, i) => {
+    const q = TEST_QUESTIONS[i];
+    if (q.type === 'mcq') {
+      if (a === q.correct) mcqCorrect++;
+    } else if (typeof a === 'string') {
+      openAnswers.push({ question: q.q, context: q.context || '', difficulty: q.diff, answer: a });
+    }
+  });
+
+  const mcqDetails = answers.map((a, i) => {
+    const q = TEST_QUESTIONS[i];
+    if (q.type !== 'mcq') return null;
+    return `Q${i + 1} [${q.diff}]: ${q.q}\nUser chose: "${q.options[a]}"\nCorrect: "${q.options[q.correct]}" ${a === q.correct ? '✓' : '✗'}`;
+  }).filter(Boolean).join('\n\n');
+
+  const prompt = `You are an English language assessor specializing in professional/business English for digital project managers in e-commerce.
+
+The user completed a placement test. Here are their results:
+
+MCQ SCORE: ${mcqCorrect}/${mcqTotal} correct
+
+MCQ DETAILS:
+${mcqDetails}
+
+OPEN-ENDED ANSWERS:
+${openAnswers.map((oa, i) => `Q${i + 1} [${oa.difficulty}]: ${oa.question}\nContext: ${oa.context}\nAnswer: "${oa.answer}"\n`).join('\n')}
+
+Based on ALL answers (MCQ accuracy AND quality of open-ended writing), determine their CEFR level.
+
+Respond in this EXACT JSON format (no markdown, no code fences):
+{"level":"B2","labelFR":"Intermédiaire avancé","score":"${mcqCorrect}/${mcqTotal} aux QCM","analysis":"Your detailed analysis here in French (3-4 paragraphs):\\n\\n1) Overall level assessment\\n2) Strengths observed\\n3) Areas for improvement\\n4) Recommended focus areas","corrections":"Detailed corrections in French for EACH wrong MCQ answer and EACH open-ended answer: explain what was wrong, give the correct answer/better phrasing, and a brief tip. Format each correction on its own line with the question number."}
+
+Level descriptors for reference:
+- A1: Absolute beginner, knows almost no professional English
+- A2: Basic vocabulary, very simple sentences
+- B1: Can handle simple professional situations
+- B2: Can participate in most professional discussions
+- C1: Can express complex ideas fluently
+- C2: Near-native professional fluency
+
+The labelFR should be one of: Débutant (A1), Élémentaire (A2), Intermédiaire (B1), Intermédiaire avancé (B2), Avancé (C1), Maîtrise (C2)`;
+
+  try {
+    const r = await aiChat('You are a language assessment AI. Return ONLY valid JSON, no markdown.', [{ role: 'user', text: prompt }], 2048);
+    const cleaned = r.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const result = JSON.parse(cleaned);
+    lsSetRaw(ukey('level'), result.level);
+    lsSet(ukey('test_result'), result);
+    state.testPhase = 'done';
+    state.testResult = result;
+    state.userLevel = result.level;
+  } catch (e) {
+    const fallback = { level: 'B2', labelFR: 'Intermédiaire avancé', score: `${mcqCorrect}/${mcqTotal} aux QCM`, analysis: `Score QCM : ${mcqCorrect}/${mcqTotal}.\n\nVotre niveau estimé est B2 (intermédiaire avancé). Vous maîtrisez les bases de l'anglais professionnel mais certains points méritent d'être approfondis.\n\nPassez les modules de formation pour progresser.` };
+    lsSetRaw(ukey('level'), fallback.level);
+    lsSet(ukey('test_result'), fallback);
+    state.testPhase = 'done';
+    state.testResult = fallback;
+    state.userLevel = fallback.level;
+  }
   render();
 }
 
@@ -495,10 +706,12 @@ function retakeTest() {
   state.testPhase = 'idle';
   state.testIndex = 0;
   state.testAnswers = [];
+  state.testSelected = null;
   state.testOpenAnswer = '';
   state.testResult = null;
   state.userLevel = null;
-  try { localStorage.removeItem('ep_level'); localStorage.removeItem('ep_test_result'); } catch {}
+  lsRemove(ukey('level'));
+  lsRemove(ukey('test_result'));
   render();
 }
 
@@ -514,8 +727,7 @@ function markEasy() {
   const w = filtered[state.cardIndex % filtered.length].en;
   if (!state.learnedWords.includes(w)) {
     state.learnedWords.push(w);
-    state.wordsLearned = state.learnedWords.length;
-    lsSet('ep_learned', state.learnedWords);
+    lsSet(ukey('learned'), state.learnedWords);
   }
   nextCard();
 }
@@ -524,7 +736,7 @@ function markHard() {
   const w = filtered[state.cardIndex % filtered.length].en;
   if (!state.hardWords.includes(w)) {
     state.hardWords.push(w);
-    lsSet('ep_hard', state.hardWords);
+    lsSet(ukey('hard'), state.hardWords);
   }
   nextCard();
 }
@@ -567,7 +779,7 @@ async function sendChatMessage() {
     const msgs = parseChatResponse(response);
     state.chatMessages.push(...msgs);
     state.conversationCount++;
-    lsSet('ep_convos', state.conversationCount);
+    lsSetRaw(ukey('convos'), state.conversationCount.toString());
   } catch (e) {
     state.chatMessages.push({ role: 'assistant', text: 'Sorry, there was an error. Please try again.' });
   }
@@ -610,7 +822,7 @@ async function sendSimMessage() {
 function endSim() {
   state.activeSim = null;
   state.simsCompleted++;
-  lsSet('ep_sims', state.simsCompleted);
+  lsSetRaw(ukey('sims'), state.simsCompleted.toString());
   render();
 }
 
@@ -637,7 +849,7 @@ async function submitEmail() {
     const response = await aiChat(system, [{ role: 'user', text: userMsg }], 2048);
     state.emailFeedback = response;
     state.emailsWritten++;
-    lsSet('ep_emails', state.emailsWritten);
+    lsSetRaw(ukey('emails'), state.emailsWritten.toString());
   } catch (e) {
     state.emailFeedback = 'Error analyzing email. Please try again.';
   }
@@ -661,7 +873,53 @@ function esc(s) {
   return d.innerHTML;
 }
 
+function renderSessionSelect() {
+  const profiles = state.users.map(u => {
+    const lv = lsRaw(`ep_${u.id}_level`);
+    const tr = ls(`ep_${u.id}_test_result`, null);
+    const initials = (u.firstName[0] + u.lastName[0]).toUpperCase();
+    const fullName = `${u.firstName} ${u.lastName}`;
+    const levelLabel = tr ? `${tr.level} — ${tr.labelFR}` : 'Pas encore évalué';
+    return { ...u, initials, fullName, levelLabel };
+  });
+
+  let profilesHtml = '';
+  if (profiles.length > 0) {
+    profilesHtml = `
+      <div class="session-profiles">
+        ${profiles.map(p => `
+          <button class="session-profile-btn" onclick="loginProfile('${p.id}')">
+            <div class="session-profile-avatar">${esc(p.initials)}</div>
+            <div>
+              <p class="session-profile-name">${esc(p.fullName)}</p>
+              <p class="session-profile-level">${esc(p.levelLabel)}</p>
+            </div>
+          </button>
+        `).join('')}
+      </div>
+      <div class="session-divider">ou</div>
+    `;
+  }
+
+  return `<div class="session-screen">
+    <div class="session-box">
+      <div style="text-align:center;margin-bottom:8px;">
+        <div style="width:56px;height:56px;background:var(--coral);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:22px;margin-bottom:16px;">E</div>
+      </div>
+      <h1 class="session-title">EngagePro</h1>
+      <p class="session-subtitle">Sélectionnez votre profil ou créez-en un nouveau</p>
+      ${profilesHtml}
+      <div class="session-form">
+        <input class="session-input" type="text" placeholder="Prénom" value="${esc(state.newFirstName)}" oninput="state.newFirstName=this.value">
+        <input class="session-input" type="text" placeholder="Nom" value="${esc(state.newLastName)}" oninput="state.newLastName=this.value" onkeydown="if(event.key==='Enter')createProfile()">
+        <button class="btn btn-primary" style="width:100%;margin-top:4px;" onclick="createProfile()">Créer un profil</button>
+      </div>
+    </div>
+  </div>`;
+}
+
 function renderSidebar() {
+  const activeUser = getActiveUser();
   const items = [
     { id: 'test', icon: '✦', label: 'Test de niveau' },
     { id: 'dashboard', icon: '◻', label: 'Dashboard' },
@@ -675,11 +933,21 @@ function renderSidebar() {
   const levelText = tr ? `${tr.level} — ${tr.labelFR}` : 'Non évalué';
   const progressPct = Math.min(100, (state.learnedWords.length / VOCAB.length) * 100);
 
+  const userInitials = activeUser ? (activeUser.firstName[0] + activeUser.lastName[0]).toUpperCase() : '';
+  const userFullName = activeUser ? `${activeUser.firstName} ${activeUser.lastName}` : '';
+
   document.getElementById('sidebar').innerHTML = `
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">E</div>
       <span class="sidebar-logo-text">EngagePro</span>
     </div>
+    <button class="sidebar-user" onclick="navigate('profile')">
+      <div class="sidebar-user-avatar">${esc(userInitials)}</div>
+      <div>
+        <p class="sidebar-user-name">${esc(userFullName)}</p>
+        <p class="sidebar-user-sub">Mon profil</p>
+      </div>
+    </button>
     <div class="sidebar-nav">
       ${items.map(it => `
         <button class="nav-item ${state.page === it.id ? 'active' : ''}" onclick="navigate('${it.id}')">
@@ -720,6 +988,7 @@ function renderMain() {
   else if (p === 'chat') html = renderChatPage();
   else if (p === 'sim') html = renderSimPage();
   else if (p === 'email') html = renderEmailPage();
+  else if (p === 'profile') html = renderProfile();
   document.getElementById('main').innerHTML = html;
 }
 
@@ -739,7 +1008,14 @@ function renderTest() {
       <h2 style="font-size:24px;font-weight:800;margin-bottom:12px;">Évaluez votre niveau d'anglais professionnel</h2>
       <p style="font-size:16px;color:var(--slate);line-height:1.7;margin-bottom:12px;">Ce test comporte 20 questions adaptées au contexte e-commerce et gestion de projet digital : vocabulaire métier, compréhension, grammaire appliquée et rédaction.</p>
       <p style="font-size:15px;color:var(--slate);line-height:1.7;margin-bottom:36px;">À la fin, vous recevrez votre niveau CECRL (A1 à C2) avec une analyse de vos forces et axes d'amélioration.</p>
-      <button class="btn btn-primary" onclick="state.testPhase='inprogress';state.testIndex=0;state.testAnswers=[];state.testOpenAnswer='';render();">Commencer le test</button>
+      <button class="btn btn-primary" onclick="state.testPhase='inprogress';state.testIndex=0;state.testAnswers=[];state.testSelected=null;state.testOpenAnswer='';render();">Commencer le test</button>
+    </div>`;
+  }
+  if (state.testPhase === 'analyzing') {
+    return `<div style="max-width:640px;margin:0 auto;text-align:center;padding:80px 0;">
+      <div class="gate-icon" style="margin:0 auto 28px;">✦</div>
+      <h2 style="font-size:24px;font-weight:800;margin-bottom:12px;">Analyse en cours...</h2>
+      <p style="font-size:16px;color:var(--slate);line-height:1.7;">L'IA évalue vos réponses. Cela peut prendre quelques secondes.</p>
     </div>`;
   }
   if (state.testPhase === 'inprogress') {
@@ -748,13 +1024,20 @@ function renderTest() {
     let body = '';
     if (q.type === 'mcq') {
       body = `<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;">
-        ${q.options.map((opt, i) => `<button class="test-option ${state.testAnswers[state.testIndex] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">${esc(opt)}</button>`).join('')}
+        ${q.options.map((opt, i) => `<button class="test-option ${state.testSelected === i ? 'selected' : ''}" onclick="selectAnswer(${i})">${esc(opt)}</button>`).join('')}
+      </div>
+      <div class="test-nav-bar">
+        <button class="test-back-btn" onclick="goBackQuestion()" ${state.testIndex === 0 ? 'disabled' : ''}>← Précédent</button>
+        ${state.testSelected !== null ? `<button class="btn btn-primary btn-sm" onclick="nextMCQ()">Suivant →</button>` : '<div></div>'}
       </div>`;
     } else {
       body = `<div style="margin-top:20px;">
         ${q.context ? `<p style="font-size:15px;color:var(--slate);line-height:1.6;margin-bottom:16px;font-style:italic;">${esc(q.context)}</p>` : ''}
         <textarea class="test-textarea" placeholder="Write your answer in English…" oninput="state.testOpenAnswer=this.value">${esc(state.testOpenAnswer)}</textarea>
-        <button class="btn btn-primary" style="margin-top:12px;" onclick="submitOpenAnswer()">Valider</button>
+        <div class="test-nav-bar">
+          <button class="test-back-btn" onclick="goBackQuestion()" ${state.testIndex === 0 ? 'disabled' : ''}>← Précédent</button>
+          <button class="btn btn-primary btn-sm" onclick="submitOpenAnswer()">Valider →</button>
+        </div>
       </div>`;
     }
     return `<div class="page-header"><h1 class="page-title">Test de niveau</h1><p class="page-subtitle">Évaluez votre anglais professionnel en 20 questions</p></div>
@@ -775,6 +1058,11 @@ function renderTest() {
   }
   if (state.testPhase === 'done' && state.testResult) {
     const r = state.testResult;
+    const correctionsHtml = r.corrections ? `
+      <div class="corrections-section">
+        <h3>Corrections détaillées</h3>
+        <div class="corrections-content">${esc(r.corrections)}</div>
+      </div>` : '';
     return `<div class="page-header"><h1 class="page-title">Test de niveau</h1></div>
       <div style="max-width:680px;margin:0 auto;">
         <div class="test-result-hero">
@@ -785,8 +1073,9 @@ function renderTest() {
         </div>
         <div class="card" style="margin-bottom:24px;cursor:default;" onmouseenter="" onmouseleave="">
           <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">Analyse</h3>
-          <p style="font-size:15px;line-height:1.8;color:var(--navy);">${esc(r.analysis)}</p>
+          <p style="font-size:15px;line-height:1.8;color:var(--navy);white-space:pre-wrap;">${esc(r.analysis)}</p>
         </div>
+        ${correctionsHtml}
         <div style="display:flex;gap:12px;">
           <button class="btn btn-primary" style="flex:1;" onclick="navigate('dashboard')">Commencer la formation</button>
           <button class="btn btn-outline" onclick="retakeTest()">Repasser le test</button>
@@ -797,13 +1086,15 @@ function renderTest() {
 }
 
 function renderDashboard() {
+  const activeUser = getActiveUser();
+  const greeting = activeUser ? `Bonjour ${esc(activeUser.firstName)} 👋` : 'Bonjour 👋';
   return `<div>
     <div style="margin-bottom:40px;">
-      <h1 style="font-size:32px;font-weight:900;margin-bottom:8px;">Bonjour 👋</h1>
+      <h1 style="font-size:32px;font-weight:900;margin-bottom:8px;">${greeting}</h1>
       <p style="font-size:17px;color:var(--slate);">Prête à progresser en anglais professionnel aujourd'hui ?</p>
     </div>
     <div class="stat-grid">
-      <div class="stat-card"><p class="stat-label">Mots appris</p><p class="stat-value">${state.wordsLearned}</p></div>
+      <div class="stat-card"><p class="stat-label">Mots appris</p><p class="stat-value">${state.learnedWords.length}</p></div>
       <div class="stat-card"><p class="stat-label">Conversations</p><p class="stat-value">${state.conversationCount}</p></div>
       <div class="stat-card"><p class="stat-label">Emails rédigés</p><p class="stat-value">${state.emailsWritten}</p></div>
       <div class="stat-card"><p class="stat-label">Simulations</p><p class="stat-value">${state.simsCompleted}</p></div>
@@ -835,6 +1126,35 @@ function renderDashboard() {
         <h3 class="card-title">Réunions & présentations</h3>
         <p class="card-desc">Structurez et animez vos réunions en anglais.</p>
       </div>
+    </div>
+  </div>`;
+}
+
+function renderProfile() {
+  const activeUser = getActiveUser();
+  if (!activeUser) return '';
+  const initials = (activeUser.firstName[0] + activeUser.lastName[0]).toUpperCase();
+  const fullName = `${activeUser.firstName} ${activeUser.lastName}`;
+  const tr = state.testResult;
+  const levelText = tr ? `${tr.level} — ${tr.labelFR}` : 'Non évalué';
+
+  return `<div>
+    <div class="profile-header">
+      <div class="profile-avatar">${esc(initials)}</div>
+      <div>
+        <h1 class="profile-name">${esc(fullName)}</h1>
+        <p class="profile-level">${esc(levelText)}</p>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><p class="stat-label">Mots appris</p><p class="stat-value">${state.learnedWords.length}</p></div>
+      <div class="stat-card"><p class="stat-label">Conversations</p><p class="stat-value">${state.conversationCount}</p></div>
+      <div class="stat-card"><p class="stat-label">Emails rédigés</p><p class="stat-value">${state.emailsWritten}</p></div>
+      <div class="stat-card"><p class="stat-label">Simulations</p><p class="stat-value">${state.simsCompleted}</p></div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="switchProfile()">Changer de profil</button>
+      <button class="btn btn-danger btn-sm" onclick="if(confirm('Supprimer ce profil et toutes ses données ?'))deleteProfile()">Supprimer ce profil</button>
     </div>
   </div>`;
 }
@@ -966,17 +1286,19 @@ function renderEmailPage() {
   </div>`;
 }
 
-function renderComingSoon(title, icon, desc) {
-  return `<div class="page-header"><h1 class="page-title">${esc(title)}</h1></div>
-    <div class="coming-soon">
-      <div class="coming-soon-icon">${icon}</div>
-      <h2>${esc(title)}</h2>
-      <p>${esc(desc)}</p>
-      <span class="tag tag-coral">Prochainement</span>
-    </div>`;
-}
-
 function render() {
+  const root = document.getElementById('root');
+  if (!state.activeUserId) {
+    root.innerHTML = renderSessionSelect();
+    return;
+  }
+  root.innerHTML = `
+    <div class="app">
+      <nav class="sidebar" id="sidebar"></nav>
+      <main class="main" id="main"></main>
+      <nav class="mobile-nav" id="mobile-nav"></nav>
+    </div>
+  `;
   renderSidebar();
   renderMain();
 }
