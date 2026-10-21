@@ -189,6 +189,35 @@
     .coming-soon p { font-size: 15px; color: var(--slate); line-height: 1.6; }
     .coming-soon .tag { margin-top: 20px; }
 
+    .chat-container { display: flex; flex-direction: column; height: calc(100vh - 130px); }
+    .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px; }
+    .chat-bubble { max-width: 75%; padding: 16px 20px; border-radius: 20px; font-size: 15px; line-height: 1.65; }
+    .chat-bubble-user { background: var(--navy); color: white; align-self: flex-end; border-top-right-radius: 6px; }
+    .chat-bubble-ai { background: var(--surface); color: var(--navy); align-self: flex-start; border-top-left-radius: 6px; border: 1px solid var(--border); }
+    .chat-bubble-correction { background: rgba(232,118,74,0.08); color: var(--navy); align-self: flex-start; border: 1px solid rgba(232,118,74,0.2); border-top-left-radius: 6px; }
+    .chat-correction-label { font-size: 12px; font-weight: 700; color: var(--coral); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .chat-input-bar { display: flex; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .chat-input { flex: 1; padding: 14px 20px; border-radius: var(--radius-pill); border: 1px solid var(--border-strong); font-size: 15px; background: var(--surface); transition: border-color 0.2s; }
+    .chat-input:focus { outline: none; border-color: var(--coral); }
+    .chat-typing { align-self: flex-start; background: var(--surface); padding: 16px 20px; border-radius: 20px; border-top-left-radius: 6px; border: 1px solid var(--border); color: var(--slate); font-size: 14px; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .chat-typing span { animation: pulse 1.2s infinite; }
+
+    .sim-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--navy); border-radius: var(--radius); margin-bottom: 20px; }
+    .sim-header-title { font-size: 17px; color: white; font-weight: 700; }
+    .sim-header-label { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 600; }
+
+    .email-brief { background: var(--navy); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; }
+    .email-brief-label { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 4px; }
+    .email-brief-text { font-size: 15px; color: white; line-height: 1.6; }
+    .email-editor { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
+    .email-field { display: flex; align-items: center; gap: 8px; padding: 12px 24px; border-bottom: 1px solid var(--border); }
+    .email-field label { font-size: 14px; color: var(--slate); font-weight: 600; width: 55px; }
+    .email-field input { flex: 1; border: none; font-size: 14px; color: var(--navy); background: transparent; outline: none; }
+    .email-body { width: 100%; min-height: 220px; padding: 20px 24px; border: none; font-size: 15px; line-height: 1.7; resize: vertical; color: var(--navy); font-family: var(--font); }
+    .email-body:focus { outline: none; }
+    .email-feedback { background: var(--surface); border-radius: 20px; padding: 28px; border: 1px solid var(--border); margin-top: 24px; white-space: pre-wrap; font-size: 15px; line-height: 1.8; }
+
     .gate-screen { max-width: 500px; margin: 80px auto; text-align: center; }
     .gate-icon {
       width: 64px; height: 64px; background: var(--coral-light); border-radius: 20px;
@@ -315,20 +344,20 @@ const MEETING_TYPES = [
 ];
 
 const SCENARIOS = [
-  { id: 'standup', title: 'Daily Standup', desc: 'Participez à un daily standup avec votre équipe produit.', icon: '▲', diff: 'Intermédiaire', duration: '~5 min' },
-  { id: 'client', title: 'Client Call', desc: 'Présentez l\'avancement d\'un projet e-commerce à un client anglophone.', icon: '●', diff: 'Avancé', duration: '~10 min' },
-  { id: 'sprint', title: 'Sprint Planning', desc: 'Animez une session de sprint planning avec votre équipe.', icon: '◆', diff: 'Intermédiaire', duration: '~10 min' },
-  { id: 'agency', title: 'Brief agence', desc: 'Briefez une agence de développement sur un nouveau projet.', icon: '■', diff: 'Avancé', duration: '~10 min' },
-  { id: 'retro', title: 'Rétrospective', desc: 'Participez à une rétro d\'équipe en anglais.', icon: '◻', diff: 'Intermédiaire', duration: '~8 min' },
-  { id: 'interview', title: 'Entretien d\'embauche', desc: 'Préparez-vous pour un entretien en anglais.', icon: '★', diff: 'Avancé', duration: '~15 min' },
+  { id: 'standup', title: 'Daily Standup', desc: 'Participez à un daily standup avec votre équipe produit.', icon: '▲', diff: 'Intermédiaire', duration: '~5 min', system: "You are a Scrum Master running a daily standup for a digital project team at an e-commerce company. The user is a digital project manager. Conduct a realistic standup: ask what they did yesterday, what they plan today, and if there are blockers. After each message, if they make English mistakes, add a correction prefixed with '✏ Correction:'. Speak only English.", opening: "Good morning! Let's kick off our daily standup. Can you tell me what you worked on yesterday?" },
+  { id: 'client', title: 'Client Call', desc: 'Présentez l\'avancement d\'un projet e-commerce à un client anglophone.', icon: '●', diff: 'Avancé', duration: '~10 min', system: "You are a senior client at a UK-based retail company. The user is a digital project manager presenting a status update for an e-commerce website redesign. Ask tough but fair questions about timelines, budget, KPIs. After each message, if they make English mistakes, add a correction prefixed with '✏ Correction:'. Speak only English.", opening: "Hi, thanks for setting up this call. I'm looking forward to hearing the project update. Please go ahead." },
+  { id: 'sprint', title: 'Sprint Planning', desc: 'Animez une session de sprint planning avec votre équipe.', icon: '◆', diff: 'Intermédiaire', duration: '~10 min', system: "You are a senior developer in a sprint planning meeting. The user is the digital project manager leading the session. Ask clarifying questions about requirements, push back on unrealistic estimates. After each message, if they make English mistakes, add a correction prefixed with '✏ Correction:'. Speak only English.", opening: "Hey, ready for sprint planning? What are the main goals you'd like us to focus on this sprint?" },
+  { id: 'agency', title: 'Brief agence', desc: 'Briefez une agence de développement sur un nouveau projet.', icon: '■', diff: 'Avancé', duration: '~10 min', system: "You are a project lead at a web development agency. The user is a digital project manager briefing you on a new e-commerce project. Ask about requirements, technical constraints, timeline, budget. After each message, if they make English mistakes, add a correction prefixed with '✏ Correction:'. Speak only English.", opening: "Hi there! Thanks for reaching out. We're excited about this project. Could you walk us through the brief?" },
+  { id: 'retro', title: 'Rétrospective', desc: 'Participez à une rétro d\'équipe en anglais.', icon: '◻', diff: 'Intermédiaire', duration: '~8 min', system: "You are facilitating a sprint retrospective for an e-commerce team. The user is a digital project manager participating. Discuss what went well, what didn't, and action items. After each message, if they make English mistakes, add a correction prefixed with '✏ Correction:'. Speak only English.", opening: "Alright team, let's start our retro. First — what went well this sprint?" },
+  { id: 'interview', title: 'Entretien d\'embauche', desc: 'Préparez-vous pour un entretien en anglais.', icon: '★', diff: 'Avancé', duration: '~15 min', system: "You are a hiring manager interviewing the user for a Digital Project Manager position in e-commerce. Ask behavioral and situational questions about project management, agile, KPIs. After each message, if they make English mistakes, add a correction prefixed with '✏ Correction:'. Speak only English.", opening: "Welcome! Thanks for coming in today. Let's start — could you tell me about your experience as a Digital Project Manager?" },
 ];
 
 const EMAIL_SCENARIOS = [
-  { id: 'followup', title: 'Relance prestataire', desc: 'Relancez une agence en retard sur un livrable.' },
-  { id: 'status', title: 'Point d\'avancement', desc: 'Envoyez un status update à votre manager.' },
-  { id: 'bug', title: 'Signalement de bug', desc: 'Signalez un bug critique à l\'équipe technique.' },
-  { id: 'intro', title: 'Prise de contact', desc: 'Présentez-vous à une nouvelle équipe internationale.' },
-  { id: 'recap', title: 'Compte-rendu de réunion', desc: 'Rédigez un meeting recap après un sprint review.' },
+  { id: 'followup', title: 'Relance prestataire', desc: 'Relancez une agence en retard sur un livrable.', brief: "Your web development agency is 5 days late on delivering the new product page templates. Write a professional but firm follow-up email asking for a status update and a revised timeline. The contact is Sarah Chen, Project Lead at WebForce Agency." },
+  { id: 'status', title: 'Point d\'avancement', desc: 'Envoyez un status update à votre manager.', brief: "Write a weekly status update email to your manager (James Miller, Head of Digital). Cover: the homepage redesign is on track, the payment integration has a 2-day delay due to API issues, and you need a decision on the loyalty program scope by Friday." },
+  { id: 'bug', title: 'Signalement de bug', desc: 'Signalez un bug critique à l\'équipe technique.', brief: "Write an email to the dev team lead (Alex Kumar) reporting a critical bug: the discount code field on checkout is applying the wrong percentage on orders over €200. Include steps to reproduce and the expected vs actual behavior." },
+  { id: 'intro', title: 'Prise de contact', desc: 'Présentez-vous à une nouvelle équipe internationale.', brief: "You're starting a new role as Digital Project Manager. Write an introduction email to your new international team (based in London and Berlin). Present your background, your role, and suggest a kickoff meeting." },
+  { id: 'recap', title: 'Compte-rendu de réunion', desc: 'Rédigez un meeting recap après un sprint review.', brief: "Write a meeting recap email after a sprint review. Attendees: product team + stakeholders. Cover: 3 features demoed (new search filters, mobile checkout optimization, inventory sync), 1 item pushed to next sprint (email notification system), next steps and owners." },
 ];
 
 function ls(key, fallback) {
@@ -354,6 +383,19 @@ const state = {
   conversationCount: ls('ep_convos', 0),
   emailsWritten: ls('ep_emails', 0),
   simsCompleted: ls('ep_sims', 0),
+  chatMessages: [{ role: 'assistant', text: "Hi! I'm your English practice partner. I'm here to help you improve your professional English. Talk to me about anything related to e-commerce, project management, or digital topics. I'll correct your mistakes and suggest better phrasing. Let's start — tell me about your last project!" }],
+  chatInput: '',
+  isTyping: false,
+  activeSim: null,
+  simMessages: [],
+  simInput: '',
+  isSimTyping: false,
+  activeEmail: null,
+  emailTo: '',
+  emailSubject: '',
+  emailBody: '',
+  emailFeedback: null,
+  emailLoading: false,
 };
 
 function navigate(page) {
@@ -488,6 +530,131 @@ function markHard() {
 }
 function setVocabCat(cat) { state.vocabCat = cat; state.cardIndex = 0; state.flipped = false; render(); }
 
+async function aiChat(system, messages, maxTokens) {
+  const res = await fetch('/.netlify/functions/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system, messages: messages.map(m => ({ role: m.role, content: m.text })), max_tokens: maxTokens || 1024 }),
+  });
+  if (!res.ok) throw new Error('API error');
+  const data = await res.json();
+  return data.text;
+}
+
+function parseChatResponse(text) {
+  const msgs = [];
+  if (text.includes('✏ Correction:')) {
+    const parts = text.split('✏ Correction:');
+    msgs.push({ role: 'assistant', text: parts[0].trim() });
+    msgs.push({ role: 'assistant', text: parts[1].trim(), isCorrection: true });
+  } else {
+    msgs.push({ role: 'assistant', text });
+  }
+  return msgs;
+}
+
+async function sendChatMessage() {
+  if (!state.chatInput.trim() || state.isTyping) return;
+  const input = state.chatInput;
+  state.chatMessages.push({ role: 'user', text: input });
+  state.chatInput = '';
+  state.isTyping = true;
+  render();
+  scrollChat('chat-messages');
+  try {
+    const system = "You are a friendly and professional English tutor helping a French digital project manager (e-commerce specialist) improve their professional English. Have natural conversations about digital/e-commerce topics. After each message, if the user makes grammar, vocabulary, or phrasing mistakes, add a correction section prefixed with '✏ Correction:' with the corrected version and a brief explanation. Be encouraging. Speak only English.";
+    const response = await aiChat(system, state.chatMessages, 1024);
+    const msgs = parseChatResponse(response);
+    state.chatMessages.push(...msgs);
+    state.conversationCount++;
+    lsSet('ep_convos', state.conversationCount);
+  } catch (e) {
+    state.chatMessages.push({ role: 'assistant', text: 'Sorry, there was an error. Please try again.' });
+  }
+  state.isTyping = false;
+  render();
+  scrollChat('chat-messages');
+}
+
+function startSim(id) {
+  const sc = SCENARIOS.find(s => s.id === id);
+  if (!sc) return;
+  state.activeSim = id;
+  state.simMessages = [{ role: 'assistant', text: sc.opening }];
+  state.simInput = '';
+  state.isSimTyping = false;
+  navigate('sim');
+}
+
+async function sendSimMessage() {
+  if (!state.simInput.trim() || state.isSimTyping) return;
+  const sc = SCENARIOS.find(s => s.id === state.activeSim);
+  if (!sc) return;
+  state.simMessages.push({ role: 'user', text: state.simInput });
+  state.simInput = '';
+  state.isSimTyping = true;
+  render();
+  scrollChat('sim-messages');
+  try {
+    const response = await aiChat(sc.system, state.simMessages, 1024);
+    const msgs = parseChatResponse(response);
+    state.simMessages.push(...msgs);
+  } catch (e) {
+    state.simMessages.push({ role: 'assistant', text: 'Sorry, there was an error. Please try again.' });
+  }
+  state.isSimTyping = false;
+  render();
+  scrollChat('sim-messages');
+}
+
+function endSim() {
+  state.activeSim = null;
+  state.simsCompleted++;
+  lsSet('ep_sims', state.simsCompleted);
+  render();
+}
+
+function startEmail(id) {
+  state.activeEmail = id;
+  state.emailTo = '';
+  state.emailSubject = '';
+  state.emailBody = '';
+  state.emailFeedback = null;
+  state.emailLoading = false;
+  render();
+}
+
+async function submitEmail() {
+  if (!state.emailBody.trim() || state.emailLoading) return;
+  const es = EMAIL_SCENARIOS.find(e => e.id === state.activeEmail);
+  if (!es) return;
+  state.emailLoading = true;
+  state.emailFeedback = null;
+  render();
+  try {
+    const system = "You are an English writing coach for a French professional (e-commerce/digital project management). Review the email and provide detailed feedback:\n\n📝 CORRECTED VERSION:\n(The full corrected email)\n\n✅ WHAT'S GOOD:\n(What they did well)\n\n⚠️ CORRECTIONS:\n(List each error with explanation)\n\n💡 TIPS:\n(Professional email writing tips)\n\nBe encouraging but thorough. Write in English.";
+    const userMsg = `Brief: ${es.brief}\n\nTo: ${state.emailTo}\nSubject: ${state.emailSubject}\n\n${state.emailBody}`;
+    const response = await aiChat(system, [{ role: 'user', text: userMsg }], 2048);
+    state.emailFeedback = response;
+    state.emailsWritten++;
+    lsSet('ep_emails', state.emailsWritten);
+  } catch (e) {
+    state.emailFeedback = 'Error analyzing email. Please try again.';
+  }
+  state.emailLoading = false;
+  render();
+}
+
+function cancelEmail() { state.activeEmail = null; state.emailFeedback = null; render(); }
+
+function scrollChat(id) {
+  setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollTop = el.scrollHeight; }, 50);
+}
+
+function handleChatKey(e, sendFn) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFn(); }
+}
+
 function esc(s) {
   const d = document.createElement('div');
   d.textContent = s;
@@ -550,7 +717,7 @@ function renderMain() {
   else if (p === 'dashboard') html = renderDashboard();
   else if (p === 'vocab') html = renderVocabPage();
   else if (p === 'meeting') html = renderMeetings();
-  else if (p === 'chat') html = renderComingSoon('Conversation IA', '●', 'Discutez en anglais avec un tuteur IA qui corrige vos erreurs en temps réel. Pratiquez le vocabulaire métier dans des échanges naturels et recevez un feedback instantané sur votre grammaire et vos formulations.');
+  else if (p === 'chat') html = renderChatPage();
   else if (p === 'sim') html = renderSimPage();
   else if (p === 'email') html = renderEmailPage();
   document.getElementById('main').innerHTML = html;
@@ -719,11 +886,43 @@ function renderMeetings() {
   </div>`;
 }
 
+function renderChatPage() {
+  const msgs = state.chatMessages.map(m => {
+    if (m.isCorrection) return `<div class="chat-bubble chat-bubble-correction"><p class="chat-correction-label">✏ Correction</p>${esc(m.text)}</div>`;
+    return `<div class="chat-bubble ${m.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}">${esc(m.text)}</div>`;
+  }).join('');
+  const typing = state.isTyping ? '<div class="chat-typing"><span>Typing…</span></div>' : '';
+  return `<div class="chat-container">
+    <div class="page-header"><h1 class="page-title">Conversation</h1><p class="page-subtitle">Discutez en anglais — l'IA corrige vos erreurs en temps réel</p></div>
+    <div class="chat-messages" id="chat-messages">${msgs}${typing}</div>
+    <div class="chat-input-bar">
+      <input class="chat-input" type="text" placeholder="Écrivez en anglais…" value="${esc(state.chatInput)}" oninput="state.chatInput=this.value" onkeydown="handleChatKey(event, sendChatMessage)">
+      <button class="btn btn-primary" onclick="sendChatMessage()">Envoyer</button>
+    </div>
+  </div>`;
+}
+
 function renderSimPage() {
+  if (state.activeSim) {
+    const sc = SCENARIOS.find(s => s.id === state.activeSim);
+    const msgs = state.simMessages.map(m => {
+      if (m.isCorrection) return `<div class="chat-bubble chat-bubble-correction"><p class="chat-correction-label">✏ Correction</p>${esc(m.text)}</div>`;
+      return `<div class="chat-bubble ${m.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}">${esc(m.text)}</div>`;
+    }).join('');
+    const typing = state.isSimTyping ? '<div class="chat-typing"><span>Typing…</span></div>' : '';
+    return `<div class="chat-container">
+      <div class="sim-header"><div><p class="sim-header-label">Simulation en cours</p><p class="sim-header-title">${esc(sc ? sc.title : '')}</p></div><button class="btn btn-sm" style="background:rgba(255,255,255,0.1);color:white;" onclick="endSim()">Terminer</button></div>
+      <div class="chat-messages" id="sim-messages">${msgs}${typing}</div>
+      <div class="chat-input-bar">
+        <input class="chat-input" type="text" placeholder="Répondez en anglais…" value="${esc(state.simInput)}" oninput="state.simInput=this.value" onkeydown="handleChatKey(event, sendSimMessage)">
+        <button class="btn btn-primary" onclick="sendSimMessage()">Envoyer</button>
+      </div>
+    </div>`;
+  }
   return `<div>
     <div class="page-header"><h1 class="page-title">Simulations professionnelles</h1><p class="page-subtitle">Entraînez-vous dans des situations réelles</p></div>
     <div class="card-grid">
-      ${SCENARIOS.map(s => `<div class="card" style="cursor:default;">
+      ${SCENARIOS.map(s => `<div class="card" style="cursor:pointer;" onclick="startSim('${s.id}')">
         <div class="card-icon">${s.icon}</div>
         <h3 class="card-title">${esc(s.title)}</h3>
         <p class="card-desc">${esc(s.desc)}</p>
@@ -733,29 +932,36 @@ function renderSimPage() {
         </div>
       </div>`).join('')}
     </div>
-    <div class="coming-soon" style="margin-top:40px;">
-      <div class="coming-soon-icon">▲</div>
-      <h2>Simulations IA interactives</h2>
-      <p>Les simulations en temps réel avec un agent IA (daily standup, call client, sprint planning…) seront disponibles prochainement avec la connexion au serveur IA.</p>
-      <span class="tag tag-coral">Prochainement</span>
-    </div>
   </div>`;
 }
 
 function renderEmailPage() {
+  if (state.activeEmail) {
+    const es = EMAIL_SCENARIOS.find(e => e.id === state.activeEmail);
+    const feedbackHtml = state.emailFeedback ? `<div class="email-feedback"><h3 style="font-size:17px;font-weight:700;margin-bottom:12px;color:var(--coral);">✏ Feedback</h3>${esc(state.emailFeedback)}</div>` : '';
+    const loadingHtml = state.emailLoading ? '<p style="margin-top:16px;color:var(--slate);font-size:15px;">Analyse en cours…</p>' : '';
+    return `<div style="max-width:720px;">
+      <div class="page-header"><h1 class="page-title">Rédaction d'emails</h1></div>
+      <div class="email-brief"><p class="email-brief-label">Brief</p><p class="email-brief-text">${esc(es ? es.brief : '')}</p></div>
+      <div class="email-editor">
+        <div class="email-field"><label>To:</label><input type="text" placeholder="recipient@company.com" value="${esc(state.emailTo)}" oninput="state.emailTo=this.value"></div>
+        <div class="email-field"><label>Subject:</label><input type="text" placeholder="Email subject" value="${esc(state.emailSubject)}" oninput="state.emailSubject=this.value"></div>
+        <textarea class="email-body" placeholder="Write your email here in English…" oninput="state.emailBody=this.value">${esc(state.emailBody)}</textarea>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:16px;">
+        <button class="btn btn-primary" onclick="submitEmail()" ${state.emailLoading ? 'disabled' : ''}>Corriger mon email</button>
+        <button class="btn btn-outline" onclick="cancelEmail()">Retour</button>
+      </div>
+      ${loadingHtml}${feedbackHtml}
+    </div>`;
+  }
   return `<div>
     <div class="page-header"><h1 class="page-title">Rédaction d'emails</h1><p class="page-subtitle">Choisissez un scénario et rédigez votre email</p></div>
     <div class="card-grid">
-      ${EMAIL_SCENARIOS.map(es => `<div class="card" style="cursor:default;">
+      ${EMAIL_SCENARIOS.map(es => `<div class="card" style="cursor:pointer;" onclick="startEmail('${es.id}')">
         <h3 class="card-title">${esc(es.title)}</h3>
         <p class="card-desc">${esc(es.desc)}</p>
       </div>`).join('')}
-    </div>
-    <div class="coming-soon" style="margin-top:40px;">
-      <div class="coming-soon-icon">✉</div>
-      <h2>Correction IA d'emails</h2>
-      <p>La rédaction d'emails avec feedback IA instantané (correction, suggestions, score) sera disponible prochainement avec la connexion au serveur IA.</p>
-      <span class="tag tag-coral">Prochainement</span>
     </div>
   </div>`;
 }
