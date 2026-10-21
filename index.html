@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EngagePro — Formation anglais professionnel e-commerce & digital</title>
+  <meta name="description" content="Formation en anglais professionnel pour chefs de projet digital, product owners et responsables e-commerce. Vocabulaire metier, reunions, communication avec prestataires.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,400&family=DM+Serif+Display&display=swap">
+  <style>
+    :root {
+      --navy: #0C1826;
+      --coral: #E8764A;
+      --coral-light: rgba(232,118,74,0.1);
+      --coral-muted: rgba(232,118,74,0.2);
+      --coral-hover: #D4613E;
+      --slate: #3E4C5E;
+      --mist: #F5F6F8;
+      --surface: #FFFFFF;
+      --border: rgba(12,24,38,0.07);
+      --border-strong: rgba(12,24,38,0.1);
+      --display: 'DM Serif Display', Georgia, serif;
+      --body: 'DM Sans', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--body);
+      color: var(--navy);
+      background: var(--mist);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+    h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.15; }
+    a { color: var(--coral); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--coral-hover); }
+    img { max-width: 100%; display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .inner { max-width: 1200px; margin: 0 auto; padding-inline: 24px; }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(245,246,248,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo {
+      width: 36px; height: 36px; background: var(--coral); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 900; font-size: 16px; font-family: var(--body);
+    }
+    .nav-name { font-weight: 700; font-size: 18px; color: var(--navy); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-size: 15px; font-weight: 500; color: var(--navy); text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: var(--coral); }
+    .nav-cta {
+      background: var(--coral); color: white; padding: 10px 24px; border-radius: 100px;
+      font-weight: 600; font-size: 14px; text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--coral-hover); color: white; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--navy); margin: 5px 0; }
+
+    /* HERO */
+    .hero {
+      padding: 100px 24px 80px; max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+    }
+    .hero-content { animation: fadeUp 0.7s ease both; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--coral-light); border-radius: 100px; padding: 7px 16px; margin-bottom: 24px;
+    }
+    .hero-badge-dot { width: 7px; height: 7px; background: var(--coral); border-radius: 50%; }
+    .hero-badge-text { font-size: 13px; font-weight: 600; color: var(--coral); letter-spacing: 0.02em; }
+    .hero h1 { font-size: clamp(34px, 4.2vw, 54px); color: var(--navy); margin-bottom: 24px; text-wrap: balance; }
+    .hero h1 em { color: var(--coral); font-style: normal; }
+    .hero-desc { font-size: 18px; line-height: 1.7; color: var(--slate); margin-bottom: 36px; max-width: 480px; }
+    .hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--coral); color: white; padding: 15px 32px; border-radius: 100px;
+      font-weight: 700; font-size: 16px; text-decoration: none; transition: all 0.25s;
+      display: inline-block; font-family: var(--body);
+    }
+    .btn-primary:hover { background: var(--coral-hover); color: white; transform: translateY(-2px); }
+    .hero-link { color: var(--navy); font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+    .hero-link:hover { color: var(--coral); }
+
+    .hero-visual { animation: fadeUp 0.7s ease 0.15s both; }
+    .hero-card {
+      background: var(--surface); border-radius: 20px; padding: 32px;
+      border: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px;
+    }
+    .hero-phrase { border-radius: 14px; padding: 18px; border: 1px solid var(--border); }
+    .hero-phrase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .hero-phrase-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.03em;
+    }
+    .hero-phrase-icon.en { background: var(--coral); color: white; }
+    .hero-phrase-icon.fr { background: var(--border-strong); color: var(--slate); }
+    .hero-phrase-label { color: var(--slate); font-size: 12px; font-weight: 500; }
+    .hero-phrase p { font-size: 14px; font-weight: 500; line-height: 1.55; color: var(--navy); }
+    .hero-phrase.fr p { color: var(--slate); }
+    .hero-tags { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 4px; }
+    .hero-tag {
+      background: var(--coral-muted); color: var(--coral); padding: 5px 12px;
+      border-radius: 100px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+    }
+
+    /* SECTIONS */
+    .section { padding-block: 80px; }
+    .section-bg { background: var(--surface); }
+    .section-dark { background: #0C1826; color: #E8ECF0; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-label { font-size: 13px; font-weight: 600; color: var(--coral); text-transform: uppercase; letter-spacing: 1.5px; font-family: var(--body); }
+    .section-title { font-size: clamp(26px, 3vw, 40px); margin-top: 10px; text-wrap: balance; }
+    .section-dark .section-title { color: #E8ECF0; }
+
+    /* AUDIENCE */
+    .audience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+    .audience-card {
+      background: var(--mist); border-radius: 16px; padding: 28px;
+      border: 1px solid var(--border); transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .audience-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(12,24,38,0.06); }
+    .audience-icon {
+      width: 44px; height: 44px; background: var(--coral-light); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px; font-size: 20px; color: var(--coral);
+    }
+    .audience-card h3 { font-size: 18px; margin-bottom: 6px; }
+    .audience-card p { font-size: 14px; color: var(--slate); line-height: 1.6; }
+
+    /* PILLARS */
+    .pillar { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 72px; }
+    .pillar:last-child { margin-bottom: 0; }
+    .pillar-number { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .pillar-num {
+      background: var(--coral); color: white; width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 15px; font-family: var(--body);
+    }
+    .pillar-label { font-size: 12px; font-weight: 600; color: var(--coral); text-transform: uppercase; letter-spacing: 1px; font-family: var(--body); }
+    .pillar h3 { font-size: clamp(22px, 2.2vw, 28px); margin-bottom: 14px; }
+    .pillar-text { font-size: 15px; color: var(--slate); line-height: 1.7; margin-bottom: 22px; }
+    .pillar-tags { display: flex; gap: 7px; flex-wrap: wrap; }
+    .pillar-tag { background: var(--border); padding: 7px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; color: var(--navy); font-family: var(--body); }
+    .pillar-checks { display: flex; flex-direction: column; gap: 9px; }
+    .pillar-check { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--slate); }
+    .pillar-check .ck { color: var(--coral); font-weight: 700; flex-shrink: 0; }
+
+    .pillar-vocab-visual { background: #0C1826; border-radius: 20px; padding: 36px; position: relative; overflow: hidden; }
+    .pillar-vocab-circle { position: absolute; top: 16px; right: 16px; width: 72px; height: 72px; border: 2px solid rgba(232,118,74,0.2); border-radius: 50%; }
+    .vocab-list { font-family: 'DM Sans', monospace; font-size: 13px; line-height: 2.1; color: rgba(255,255,255,0.4); }
+    .vocab-list span { color: #F0945E; }
+
+    .pillar-chat { background: var(--surface); border-radius: 20px; padding: 32px; border: 1px solid var(--border); }
+    .chat-messages { display: flex; flex-direction: column; gap: 14px; }
+    .chat-row { display: flex; align-items: flex-start; gap: 10px; }
+    .chat-row.right { flex-direction: row-reverse; }
+    .chat-avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+    .chat-avatar.coral { background: var(--coral); }
+    .chat-avatar.dark { background: #0C1826; }
+    .chat-bubble { border-radius: 14px; padding: 12px 16px; }
+    .chat-bubble.coral { background: var(--coral-light); border-top-left-radius: 4px; }
+    .chat-bubble.alt { background: var(--border); border-top-right-radius: 4px; }
+    .chat-bubble p { font-size: 13px; color: var(--navy); line-height: 1.55; }
+
+    .pillar-comms { background: var(--surface); border-radius: 20px; padding: 28px; border: 1px solid var(--border); }
+    .comms-list { display: flex; flex-direction: column; gap: 10px; }
+    .comms-item { background: var(--mist); border-radius: 10px; padding: 14px 18px; border-left: 3px solid; }
+    .comms-item.c1 { border-left-color: var(--coral); }
+    .comms-item.c2 { border-left-color: #0C1826; }
+    .comms-item.c3 { border-left-color: var(--slate); }
+    .comms-label { font-size: 12px; font-weight: 600; margin-bottom: 3px; color: var(--slate); }
+    .comms-item.c1 .comms-label { color: var(--coral); }
+    .comms-text { font-size: 13px; color: var(--navy); line-height: 1.55; font-style: italic; }
+
+    /* METHOD */
+    .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+    .method-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 32px; border: 1px solid rgba(255,255,255,0.08); }
+    .method-num { font-size: 42px; font-weight: 900; color: rgba(232,118,74,0.25); line-height: 1; font-family: var(--body); }
+    .method-card h3 { font-size: 19px; color: white; margin: 14px 0 8px; }
+    .method-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+
+    /* TESTIMONIALS */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .testimonial-card { background: var(--mist); border-radius: 16px; padding: 32px; border: 1px solid var(--border); }
+    .testimonial-stars { display: flex; gap: 3px; margin-bottom: 18px; }
+    .testimonial-stars span { color: var(--coral); font-size: 16px; }
+    .testimonial-text { font-size: 15px; color: var(--navy); line-height: 1.7; margin-bottom: 20px; }
+    .testimonial-author { font-weight: 700; font-size: 14px; color: var(--navy); }
+    .testimonial-role { font-size: 13px; color: var(--slate); }
+
+    /* PRICING */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto; }
+    .pricing-card { background: var(--surface); border-radius: 20px; padding: 36px; border: 1px solid var(--border-strong); }
+    .pricing-card.featured { background: #0C1826; border: none; position: relative; overflow: hidden; }
+    .pricing-badge { position: absolute; top: 14px; right: 14px; background: var(--coral); color: white; padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+    .pricing-tier { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-family: var(--body); }
+    .pricing-card .pricing-tier { color: var(--slate); }
+    .pricing-card.featured .pricing-tier { color: rgba(255,255,255,0.5); }
+    .pricing-amount { font-size: 44px; margin: 18px 0 6px; font-family: var(--display); }
+    .pricing-card.featured .pricing-amount { color: white; }
+    .pricing-sessions { font-size: 14px; margin-bottom: 28px; }
+    .pricing-card .pricing-sessions { color: var(--slate); }
+    .pricing-card.featured .pricing-sessions { color: rgba(255,255,255,0.5); }
+    .pricing-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .pricing-feature { display: flex; align-items: flex-start; gap: 9px; }
+    .pricing-feature .ck { color: var(--coral); font-weight: 700; flex-shrink: 0; }
+    .pricing-feature span:last-child { font-size: 14px; }
+    .pricing-card .pricing-feature span:last-child { color: var(--slate); }
+    .pricing-card.featured .pricing-feature span:last-child { color: rgba(255,255,255,0.7); }
+    .btn-outline {
+      display: block; text-align: center; background: var(--mist); color: var(--navy);
+      padding: 13px 24px; border-radius: 100px; font-weight: 700; font-size: 14px;
+      text-decoration: none; border: 1px solid var(--border-strong); transition: all 0.2s; font-family: var(--body);
+    }
+    .btn-outline:hover { background: var(--coral); color: white; border-color: var(--coral); }
+    .btn-coral {
+      display: block; text-align: center; background: var(--coral); color: white;
+      padding: 13px 24px; border-radius: 100px; font-weight: 700; font-size: 14px;
+      text-decoration: none; transition: all 0.2s; font-family: var(--body);
+    }
+    .btn-coral:hover { background: var(--coral-hover); color: white; transform: translateY(-2px); }
+
+    /* CTA */
+    .cta { padding-block: 80px; }
+    .cta-box {
+      max-width: 800px; margin: 0 auto; background: #0C1826; border-radius: 28px;
+      padding: 56px 40px; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-circle-1 { position: absolute; top: -50px; right: -50px; width: 180px; height: 180px; background: var(--coral); border-radius: 50%; opacity: 0.1; }
+    .cta-circle-2 { position: absolute; bottom: -30px; left: -30px; width: 120px; height: 120px; background: var(--coral); border-radius: 50%; opacity: 0.07; }
+    .cta-content { position: relative; z-index: 1; }
+    .cta-content h2 { font-size: clamp(24px, 3vw, 34px); color: white; margin-bottom: 14px; text-wrap: balance; }
+    .cta-content p { font-size: 16px; color: rgba(255,255,255,0.55); margin-bottom: 32px; max-width: 460px; margin-inline: auto; line-height: 1.65; }
+    .btn-cta {
+      display: inline-block; background: var(--coral); color: white;
+      padding: 15px 36px; border-radius: 100px; font-weight: 700; font-size: 15px;
+      text-decoration: none; transition: all 0.25s; font-family: var(--body);
+    }
+    .btn-cta:hover { background: white; color: #0C1826; transform: translateY(-2px); }
+
+    /* FOOTER */
+    .footer { padding: 40px 24px; border-top: 1px solid var(--border); }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .footer-logo {
+      width: 30px; height: 30px; background: var(--coral); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 900; font-size: 13px; font-family: var(--body);
+    }
+    .footer-name { font-weight: 700; font-size: 15px; color: var(--navy); }
+    .footer-links { display: flex; align-items: center; gap: 20px; font-size: 13px; color: var(--slate); flex-wrap: wrap; }
+    .footer-link { color: var(--slate); text-decoration: none; }
+    .footer-link:hover { color: var(--coral); }
+    .footer-sep { color: var(--border-strong); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: absolute;
+        top: 100%; left: 0; right: 0; background: var(--mist); padding: 20px;
+        border-bottom: 1px solid var(--border); gap: 14px;
+      }
+      .nav-toggle { display: block; }
+      .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 80px; }
+      .hero-visual { order: -1; }
+      .hero-desc { max-width: 100%; }
+      .pillar { grid-template-columns: 1fr; gap: 28px; }
+      .pillar-visual-left { order: 1; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 380px; }
+      .cta-box { padding: 40px 20px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand"><div class="nav-logo">E</div><span class="nav-name">EngagePro</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="#pillars" class="nav-link">La formation</a>
+      <a href="#method" class="nav-link">Methode</a>
+      <a href="#pricing" class="nav-link">Tarifs</a>
+      <a href="#pricing" class="nav-cta">Demarrer</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><div class="hero-badge-dot"></div><span class="hero-badge-text">Formation e-commerce & digital</span></div>
+    <h1>Parlez anglais comme vous gerez vos projets : <em>avec precision.</em></h1>
+    <p class="hero-desc">La formation qui vous donne l'anglais dont vous avez vraiment besoin. Celui des daily standups, des specs, des calls avec l'agence et des presentations client.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">Reserver ma place</a>
+      <a href="#pillars" class="hero-link">Decouvrir le programme <span>→</span></a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-phrase en">
+        <div class="hero-phrase-header"><div class="hero-phrase-icon en">EN</div><span class="hero-phrase-label">Daily Standup</span></div>
+        <p>"The sprint velocity looks good. Let me walk you through the backlog priorities."</p>
+      </div>
+      <div class="hero-phrase fr">
+        <div class="hero-phrase-header"><div class="hero-phrase-icon fr">FR</div><span class="hero-phrase-label">Point d'avancement</span></div>
+        <p>"La velocite du sprint est bonne. Je vous presente les priorites du backlog."</p>
+      </div>
+      <div class="hero-tags">
+        <span class="hero-tag">roadmap</span><span class="hero-tag">user story</span><span class="hero-tag">conversion funnel</span><span class="hero-tag">specs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-bg">
+  <div class="inner">
+    <div class="section-header"><span class="section-label">Pour qui ?</span><h2 class="section-title">Vous vous reconnaissez ?</h2></div>
+    <div class="audience-grid">
+      <div class="audience-card"><div class="audience-icon">◆</div><h3>Chef de projet digital</h3><p>Vous coordonnez des equipes tech et metier, souvent avec des interlocuteurs anglophones.</p></div>
+      <div class="audience-card"><div class="audience-icon">▲</div><h3>Product Owner</h3><p>Vous redigez des specs, priorisez le backlog et presentez la roadmap en anglais.</p></div>
+      <div class="audience-card"><div class="audience-icon">●</div><h3>Responsable e-commerce</h3><p>Vous gerez des plateformes, analysez les KPIs et echangez avec des prestataires internationaux.</p></div>
+      <div class="audience-card"><div class="audience-icon">■</div><h3>Consultant digital</h3><p>Vous intervenez chez des clients grands comptes ou l'anglais est la langue de travail.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pillars" class="section">
+  <div class="inner">
+    <div class="section-header"><span class="section-label">Le programme</span><h2 class="section-title">3 piliers pour etre operationnel</h2></div>
+    <div class="pillar">
+      <div>
+        <div class="pillar-number"><span class="pillar-num">1</span><span class="pillar-label">Vocabulaire metier</span></div>
+        <h3>Le vocabulaire e-commerce et digital qui compte vraiment</h3>
+        <p class="pillar-text">Pas de listes de mots generiques. Vous apprenez les termes que vous utilisez chaque jour : gestion de projet, specifications fonctionnelles, recette, mise en production, KPIs.</p>
+        <div class="pillar-tags"><span class="pillar-tag">Tunnel de conversion</span><span class="pillar-tag">Backlog</span><span class="pillar-tag">Sprint review</span><span class="pillar-tag">User journey</span><span class="pillar-tag">Roadmap</span></div>
+      </div>
+      <div class="pillar-vocab-visual"><div class="pillar-vocab-circle"></div><div class="vocab-list"><div><span>acceptance criteria</span> → criteres d'acceptation</div><div><span>conversion funnel</span> → tunnel de conversion</div><div><span>staging environment</span> → environnement de recette</div><div><span>go-live</span> → mise en production</div><div><span>bounce rate</span> → taux de rebond</div><div><span>A/B testing</span> → test A/B</div></div></div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-chat pillar-visual-left">
+        <div class="chat-messages">
+          <div class="chat-row"><div class="chat-avatar coral"></div><div class="chat-bubble coral"><p>"I'd like to propose a different approach for the checkout flow."</p></div></div>
+          <div class="chat-row right"><div class="chat-avatar dark"></div><div class="chat-bubble alt"><p>"Could you elaborate on the expected impact on conversion rates?"</p></div></div>
+          <div class="chat-row"><div class="chat-avatar coral"></div><div class="chat-bubble coral"><p>"Based on the data, we expect a 12% uplift. Let me share my screen."</p></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="pillar-number"><span class="pillar-num">2</span><span class="pillar-label">Reunions</span></div>
+        <h3>Animer et participer a des reunions en anglais</h3>
+        <p class="pillar-text">Presenter un projet, defendre un point de vue, faire un compte-rendu, gerer les tours de parole. Vous gagnez en aisance pour les moments qui comptent.</p>
+        <div class="pillar-checks"><div class="pillar-check"><span class="ck">✓</span><span>Structurer une presentation de projet</span></div><div class="pillar-check"><span class="ck">✓</span><span>Reformuler pour clarifier</span></div><div class="pillar-check"><span class="ck">✓</span><span>Poser les bonnes questions au bon moment</span></div></div>
+      </div>
+    </div>
+    <div class="pillar">
+      <div>
+        <div class="pillar-number"><span class="pillar-num">3</span><span class="pillar-label">Communication</span></div>
+        <h3>Echanger avec vos prestataires et equipes en anglais</h3>
+        <p class="pillar-text">Briefer une agence de developpement, coordonner avec des equipes techniques, faire des points d'avancement, remonter des problemes, negocier des delais. Le concret, pas la theorie.</p>
+        <div class="pillar-checks"><div class="pillar-check"><span class="ck">✓</span><span>Rediger des briefs clairs et precis</span></div><div class="pillar-check"><span class="ck">✓</span><span>Faire remonter un bug ou un blocage</span></div><div class="pillar-check"><span class="ck">✓</span><span>Negocier des delais et des livrables</span></div></div>
+      </div>
+      <div class="pillar-comms"><div class="comms-list">
+        <div class="comms-item c1"><p class="comms-label">Email — Relance prestataire</p><p class="comms-text">"Hi team, just following up on the delivery timeline. Could you confirm the expected go-live date?"</p></div>
+        <div class="comms-item c2"><p class="comms-label">Slack — Signaler un bug</p><p class="comms-text">"We've spotted a critical issue on the payment page. The checkout button is unresponsive on mobile."</p></div>
+        <div class="comms-item c3"><p class="comms-label">Call — Point d'avancement</p><p class="comms-text">"Let's go through the status update. Where do we stand on the API integration?"</p></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="method" class="section section-dark">
+  <div class="inner">
+    <div class="section-header"><span class="section-label">La methode</span><h2 class="section-title">Comment ca marche</h2></div>
+    <div class="method-grid">
+      <div class="method-card"><span class="method-num">01</span><h3>Sessions individuelles</h3><p>Des sessions en visio de 60 min, adaptees a votre niveau et a votre contexte metier. On travaille sur vos vrais sujets.</p></div>
+      <div class="method-card"><span class="method-num">02</span><h3>Mises en situation</h3><p>Simulations de reunions, presentations, calls clients. Vous pratiquez dans des conditions reelles.</p></div>
+      <div class="method-card"><span class="method-num">03</span><h3>Ressources metier</h3><p>Fiches de vocabulaire, templates d'emails, scripts de reunion. Du materiel directement utilisable.</p></div>
+      <div class="method-card"><span class="method-num">04</span><h3>Suivi personnalise</h3><p>Feedback detaille apres chaque session. On mesure votre progression et on ajuste le parcours.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-bg">
+  <div class="inner">
+    <div class="section-header"><span class="section-label">Temoignages</span><h2 class="section-title">Ce qu'en disent les participants</h2></div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card"><div class="testimonial-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="testimonial-text">"Avant, je redoutais chaque call en anglais avec notre agence UK. Maintenant je mene les sprint reviews sans stress. La difference c'est qu'on travaille sur mon vrai vocabulaire, pas des exercices generiques."</p><p class="testimonial-author">Sophie M.</p><p class="testimonial-role">Chef de projet digital — Retail</p></div>
+      <div class="testimonial-card"><div class="testimonial-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="testimonial-text">"En 3 mois, j'ai gagne en fluidite sur tous mes echanges avec l'equipe produit a Londres. Les mises en situation m'ont vraiment debloque a l'oral."</p><p class="testimonial-author">Thomas R.</p><p class="testimonial-role">Product Owner — SaaS B2B</p></div>
+      <div class="testimonial-card"><div class="testimonial-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="testimonial-text">"Ce que j'ai apprecie c'est le cote concret. On ne perd pas de temps sur de la grammaire abstraite. Des la premiere session, j'avais des phrases que je pouvais utiliser le lendemain."</p><p class="testimonial-author">Lea D.</p><p class="testimonial-role">Responsable e-commerce — Mode</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="section">
+  <div class="inner">
+    <div class="section-header"><span class="section-label">Tarifs</span><h2 class="section-title">Choisissez votre formule</h2></div>
+    <div class="pricing-grid">
+      <div class="pricing-card"><span class="pricing-tier">Essentiel</span><div class="pricing-amount">890 €</div><p class="pricing-sessions">10 sessions de 60 min</p><div class="pricing-features"><div class="pricing-feature"><span class="ck">✓</span><span>Audit initial de niveau</span></div><div class="pricing-feature"><span class="ck">✓</span><span>10 sessions individuelles en visio</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Fiches de vocabulaire metier</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Feedback ecrit apres chaque session</span></div></div><a href="#" class="btn-outline">Choisir cette formule</a></div>
+      <div class="pricing-card featured"><span class="pricing-badge">Recommande</span><span class="pricing-tier">Complet</span><div class="pricing-amount">1 590 €</div><p class="pricing-sessions">20 sessions de 60 min</p><div class="pricing-features"><div class="pricing-feature"><span class="ck">✓</span><span>Tout de la formule Essentiel</span></div><div class="pricing-feature"><span class="ck">✓</span><span>20 sessions individuelles en visio</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Mises en situation avancees</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Templates emails et scripts de reunion</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Acces a la bibliotheque de ressources</span></div></div><a href="#" class="btn-coral">Choisir cette formule</a></div>
+      <div class="pricing-card"><span class="pricing-tier">Sur mesure</span><div class="pricing-amount">Devis</div><p class="pricing-sessions">Formation equipe</p><div class="pricing-features"><div class="pricing-feature"><span class="ck">✓</span><span>Programme 100% adapte a votre equipe</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Sessions individuelles + collectives</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Integration a votre plan de formation</span></div><div class="pricing-feature"><span class="ck">✓</span><span>Eligible OPCO et CPF</span></div></div><a href="#" class="btn-outline">Demander un devis</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="inner">
+    <div class="cta-box">
+      <div class="cta-circle-1"></div><div class="cta-circle-2"></div>
+      <div class="cta-content">
+        <h2>Pret a passer a l'anglais professionnel ?</h2>
+        <p>Reservez un appel decouverte gratuit de 20 minutes. On evalue votre niveau et on definit un parcours adapte.</p>
+        <a href="#" class="btn-cta">Reserver mon appel decouverte</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <a href="#" class="footer-brand"><div class="footer-logo">E</div><span class="footer-name">EngagePro</span></a>
+    <div class="footer-links">
+      <span class="footer-link">contact@engagepro.fr</span><span class="footer-sep">|</span>
+      <a href="#" class="footer-link">LinkedIn</a><span class="footer-sep">|</span>
+      <span>© 2026 EngagePro</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
