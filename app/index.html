@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EngagePro App — Formation anglais professionnel</title>
+  <meta name="description" content="Plateforme d'apprentissage d'anglais professionnel pour le e-commerce et le digital.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,900&display=swap">
+  <style>
+    :root {
+      --navy: #0C1826;
+      --coral: #E8764A;
+      --coral-light: rgba(232,118,74,0.1);
+      --coral-hover: #D4613E;
+      --slate: #4A5568;
+      --mist: #F5F5F7;
+      --surface: #FFFFFF;
+      --border: rgba(12,24,38,0.06);
+      --border-strong: rgba(12,24,38,0.1);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --radius-pill: 100px;
+      --font: 'DM Sans', system-ui, -apple-system, sans-serif;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font); color: var(--navy); background: var(--mist); -webkit-font-smoothing: antialiased; }
+    a { color: var(--coral); text-decoration: none; }
+    input, textarea, button, select { font-family: inherit; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .app { display: flex; height: 100vh; overflow: hidden; }
+
+    .sidebar {
+      width: 260px; background: var(--navy); padding: 24px 16px;
+      display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto;
+    }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 40px; }
+    .sidebar-logo-icon {
+      width: 36px; height: 36px; background: var(--coral); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 900; font-size: 16px;
+    }
+    .sidebar-logo-text { font-weight: 700; font-size: 18px; color: white; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+      border-radius: var(--radius-sm); border: none; cursor: pointer;
+      font-size: 15px; font-weight: 600; text-align: left; width: 100%;
+      transition: all 0.15s; background: transparent; color: rgba(255,255,255,0.5);
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
+    .nav-item.active { background: rgba(232,118,74,0.15); color: var(--coral); }
+    .nav-item-icon { font-size: 18px; width: 24px; text-align: center; }
+    .sidebar-level {
+      padding: 16px 14px; background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-sm); margin-top: 16px;
+    }
+    .sidebar-level-label { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .sidebar-level-value { font-size: 15px; color: white; font-weight: 700; }
+    .sidebar-level-bar { background: rgba(255,255,255,0.1); border-radius: var(--radius-pill); height: 6px; margin-top: 10px; overflow: hidden; }
+    .sidebar-level-fill { background: var(--coral); height: 100%; border-radius: var(--radius-pill); transition: width 0.5s; }
+    .sidebar-back { display: flex; align-items: center; gap: 8px; padding: 12px 14px; color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 12px; border-radius: var(--radius-sm); transition: all 0.15s; }
+    .sidebar-back:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
+
+    .main { flex: 1; overflow-y: auto; padding: 32px 40px; }
+    .page { display: none; animation: fadeIn 0.4s ease both; }
+    .page.active { display: block; }
+    .page-title { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+    .page-subtitle { font-size: 15px; color: var(--slate); }
+    .page-header { margin-bottom: 32px; }
+
+    .card {
+      background: var(--surface); border-radius: 20px; padding: 28px;
+      border: 1px solid var(--border); transition: all 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(12,24,38,0.08); }
+    .card-icon {
+      width: 48px; height: 48px; background: var(--coral-light); border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 22px;
+    }
+    .card-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .card-desc { font-size: 14px; color: var(--slate); line-height: 1.5; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+
+    .btn {
+      padding: 14px 28px; border-radius: var(--radius-pill); border: none;
+      font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary { background: var(--navy); color: white; }
+    .btn-primary:hover { background: var(--coral); }
+    .btn-coral { background: var(--coral); color: white; }
+    .btn-coral:hover { background: var(--coral-hover); transform: translateY(-2px); }
+    .btn-outline { background: var(--surface); color: var(--navy); border: 1px solid var(--border-strong); }
+    .btn-outline:hover { background: var(--navy); color: white; border-color: var(--navy); }
+    .btn-sm { padding: 10px 20px; font-size: 14px; }
+    .btn-ghost { background: transparent; color: var(--slate); padding: 10px 20px; font-size: 14px; font-weight: 600; }
+
+    .tag { display: inline-flex; padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; }
+    .tag-coral { background: var(--coral-light); color: var(--coral); }
+    .tag-muted { background: rgba(12,24,38,0.05); color: var(--slate); }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 40px; }
+    .stat-card { background: var(--surface); border-radius: var(--radius); padding: 24px; border: 1px solid var(--border); }
+    .stat-label { font-size: 13px; color: var(--slate); font-weight: 600; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 900; }
+
+    .progress-bar { background: rgba(12,24,38,0.06); border-radius: var(--radius-pill); height: 8px; overflow: hidden; }
+    .progress-fill { background: var(--coral); height: 100%; border-radius: var(--radius-pill); transition: width 0.4s; }
+
+    .flashcard {
+      background: var(--surface); border-radius: 24px; padding: 48px; text-align: center;
+      border: 1px solid var(--border); cursor: pointer; min-height: 240px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .flashcard:hover { box-shadow: 0 8px 32px rgba(12,24,38,0.08); }
+    .flashcard-cat { font-size: 14px; color: var(--coral); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .flashcard-en { font-size: 32px; font-weight: 900; margin-bottom: 12px; }
+    .flashcard-fr { font-size: 22px; color: var(--coral); font-weight: 700; margin-bottom: 12px; }
+    .flashcard-example { font-size: 15px; color: var(--slate); line-height: 1.6; max-width: 400px; font-style: italic; }
+    .flashcard-hint { font-size: 15px; color: var(--slate); }
+    .flashcard-actions { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+    .flashcard-progress { text-align: center; margin-top: 16px; font-size: 14px; color: var(--slate); }
+    .btn-hard { background: rgba(239,68,68,0.1); color: #EF4444; }
+    .btn-hard:hover { background: rgba(239,68,68,0.2); }
+    .btn-easy { background: rgba(34,197,94,0.1); color: #16A34A; }
+    .btn-easy:hover { background: rgba(34,197,94,0.2); }
+
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { padding: 10px 20px; border-radius: var(--radius-pill); border: 1px solid var(--border-strong); background: var(--surface); color: var(--navy); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .vocab-item {
+      background: var(--surface); border-radius: 14px; padding: 18px 20px;
+      border: 1px solid var(--border); display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px;
+    }
+    .vocab-en { font-size: 16px; font-weight: 700; }
+    .vocab-fr { font-size: 14px; color: var(--slate); margin-top: 2px; }
+
+    .test-card {
+      background: var(--surface); border-radius: 24px; padding: 40px;
+      border: 1px solid var(--border); max-width: 680px; margin: 0 auto;
+    }
+    .test-option {
+      text-align: left; padding: 16px 20px; border-radius: 14px;
+      border: 2px solid var(--border-strong); background: var(--surface);
+      cursor: pointer; font-size: 15px; color: var(--slate); font-weight: 500;
+      line-height: 1.5; transition: all 0.15s; width: 100%; display: block;
+    }
+    .test-option:hover { border-color: var(--coral); }
+    .test-option.selected { border-color: var(--coral); background: rgba(232,118,74,0.05); color: var(--navy); }
+    .test-textarea {
+      width: 100%; min-height: 120px; padding: 16px 20px; border-radius: 14px;
+      border: 1px solid var(--border-strong); font-size: 15px; line-height: 1.7;
+      resize: vertical; color: var(--navy);
+    }
+    .test-textarea:focus { outline: none; border-color: var(--coral); }
+    .test-result-hero {
+      background: var(--navy); border-radius: 24px; padding: 48px; text-align: center;
+      margin-bottom: 24px; position: relative; overflow: hidden;
+    }
+    .test-result-hero::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 140px; height: 140px; background: var(--coral); border-radius: 50%; opacity: 0.1;
+    }
+    .test-result-level { font-size: 64px; font-weight: 900; color: var(--coral); line-height: 1; position: relative; }
+    .test-result-label { font-size: 20px; color: white; font-weight: 700; margin-top: 8px; position: relative; }
+    .test-result-score { font-size: 16px; color: rgba(255,255,255,0.5); margin-top: 4px; position: relative; }
+
+    .meeting-card { background: var(--surface); border-radius: 20px; padding: 28px; border: 1px solid var(--border); }
+    .meeting-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .meeting-phrase { background: var(--mist); border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; }
+    .meeting-phrase-en { font-size: 14px; font-weight: 600; }
+    .meeting-phrase-fr { font-size: 13px; color: var(--slate); margin-top: 2px; }
+
+    .coming-soon {
+      max-width: 500px; margin: 60px auto; text-align: center; padding: 40px;
+      background: var(--surface); border-radius: 24px; border: 1px solid var(--border);
+    }
+    .coming-soon-icon {
+      width: 64px; height: 64px; background: var(--coral-light); border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px; font-size: 28px;
+    }
+    .coming-soon h2 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+    .coming-soon p { font-size: 15px; color: var(--slate); line-height: 1.6; }
+    .coming-soon .tag { margin-top: 20px; }
+
+    .gate-screen { max-width: 500px; margin: 80px auto; text-align: center; }
+    .gate-icon {
+      width: 64px; height: 64px; background: var(--coral-light); border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px; font-size: 28px;
+    }
+
+    .mobile-nav {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--navy); padding: 8px 16px; z-index: 100;
+      justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .mobile-nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      background: none; border: none; cursor: pointer; padding: 8px 12px;
+      color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600;
+      border-radius: 8px; transition: all 0.15s;
+    }
+    .mobile-nav-item.active { color: var(--coral); }
+    .mobile-nav-item span:first-child { font-size: 20px; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .main { padding: 20px 16px 80px; }
+      .page-title { font-size: 24px; }
+      .flashcard { padding: 32px 20px; min-height: 200px; }
+      .flashcard-en { font-size: 24px; }
+      .test-card { padding: 24px; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="main" id="main"></main>
+    <nav class="mobile-nav" id="mobile-nav"></nav>
+  </div>
+
+<script>
+const VOCAB = [
+  { en: 'Conversion funnel', fr: 'Tunnel de conversion', cat: 'E-commerce', example: '"We need to optimize the conversion funnel to reduce drop-off at checkout."' },
+  { en: 'Bounce rate', fr: 'Taux de rebond', cat: 'E-commerce', example: '"The bounce rate on the landing page is too high — we should A/B test the hero."' },
+  { en: 'Average order value', fr: 'Panier moyen', cat: 'E-commerce', example: '"Our average order value increased by 15% after adding cross-sell recommendations."' },
+  { en: 'Cart abandonment', fr: 'Abandon de panier', cat: 'E-commerce', example: '"We\'re seeing a 68% cart abandonment rate on mobile."' },
+  { en: 'Checkout flow', fr: 'Parcours de paiement', cat: 'E-commerce', example: '"Let\'s simplify the checkout flow to three steps maximum."' },
+  { en: 'Sprint review', fr: 'Revue de sprint', cat: 'Gestion de projet', example: '"During the sprint review, we\'ll demo the new features to stakeholders."' },
+  { en: 'Backlog grooming', fr: 'Affinage du backlog', cat: 'Gestion de projet', example: '"We need to prioritize the backlog before the next sprint planning."' },
+  { en: 'User story', fr: 'Récit utilisateur', cat: 'Gestion de projet', example: '"Each user story should have clear acceptance criteria."' },
+  { en: 'Acceptance criteria', fr: 'Critères d\'acceptation', cat: 'Gestion de projet', example: '"The acceptance criteria for this ticket are not specific enough."' },
+  { en: 'Go-live', fr: 'Mise en production', cat: 'Gestion de projet', example: '"The go-live is scheduled for next Friday — are we on track?"' },
+  { en: 'Staging environment', fr: 'Environnement de recette', cat: 'Tech', example: '"Please deploy the latest build to the staging environment for QA."' },
+  { en: 'Hotfix', fr: 'Correctif urgent', cat: 'Tech', example: '"We need a hotfix for the payment gateway issue — it\'s blocking orders."' },
+  { en: 'API integration', fr: 'Intégration API', cat: 'Tech', example: '"The API integration with the ERP should be completed by end of sprint."' },
+  { en: 'Technical debt', fr: 'Dette technique', cat: 'Tech', example: '"We should allocate 20% of each sprint to address technical debt."' },
+  { en: 'Deployment pipeline', fr: 'Pipeline de déploiement', cat: 'Tech', example: '"The deployment pipeline is broken — CI tests are failing."' },
+  { en: 'Stakeholder', fr: 'Partie prenante', cat: 'Gestion de projet', example: '"We need stakeholder alignment before moving forward with the redesign."' },
+  { en: 'Roadmap', fr: 'Feuille de route', cat: 'Gestion de projet', example: '"Let me walk you through the product roadmap for Q1."' },
+  { en: 'KPI', fr: 'Indicateur clé de performance', cat: 'E-commerce', example: '"Which KPIs should we track to measure the success of this campaign?"' },
+  { en: 'Churn rate', fr: 'Taux d\'attrition', cat: 'E-commerce', example: '"Our churn rate spiked after the last price increase."' },
+  { en: 'Scope creep', fr: 'Dérive du périmètre', cat: 'Gestion de projet', example: '"We need to push back on scope creep — this wasn\'t in the original brief."' },
+];
+
+const TEST_QUESTIONS = [
+  { q: 'What does "deadline" mean?', type: 'mcq', cat: 'Vocabulaire', diff: 'A1-A2', options: ['A meeting with your team', 'The final date to complete something', 'A type of project document', 'A budget limit'], correct: 1 },
+  { q: 'Choose the correct sentence:', type: 'mcq', cat: 'Grammaire', diff: 'A1-A2', options: ['The project are delayed.', 'The project is delayed.', 'The project be delayed.', 'The project been delayed.'], correct: 1 },
+  { q: 'What is a "stakeholder"?', type: 'mcq', cat: 'Vocabulaire', diff: 'A1-A2', options: ['A software tool', 'A person with interest in the project', 'A type of meeting', 'A financial report'], correct: 1 },
+  { q: '"We need to _____ a meeting to discuss the new features."', type: 'mcq', cat: 'Grammaire', diff: 'A2-B1', options: ['set up', 'set down', 'set off', 'set out'], correct: 0 },
+  { q: 'What does "scope creep" refer to in project management?', type: 'mcq', cat: 'Vocabulaire', diff: 'B1', options: ['When the team works overtime', 'When project requirements expand beyond the original plan', 'When the budget is exceeded', 'When a deadline is missed'], correct: 1 },
+  { q: '"The conversion rate _____ by 15% since we redesigned the checkout flow."', type: 'mcq', cat: 'Grammaire', diff: 'B1', options: ['increased', 'has increased', 'is increasing', 'was increasing'], correct: 1 },
+  { q: 'Which phrase is most appropriate to start a sprint review?', type: 'mcq', cat: 'Communication', diff: 'B1', options: ['"Let me quickly show you what we built."', '"Hi everyone, thanks for joining. Today we\'ll demo the work completed this sprint and gather your feedback."', '"So we did some stuff this sprint."', '"I want to talk about the sprint."'], correct: 1 },
+  { q: 'What does "UAT" stand for and what does it mean?', type: 'mcq', cat: 'Vocabulaire', diff: 'B1-B2', options: ['User Application Testing', 'Universal Acceptance Terms', 'User Acceptance Testing — validation by end users before go-live', 'Unified API Tracking'], correct: 2 },
+  { q: '"If we _____ the payment integration earlier, we _____ this delay."', type: 'mcq', cat: 'Grammaire', diff: 'B2', options: ['started / would avoid', 'had started / would have avoided', 'have started / will avoid', 'would start / avoided'], correct: 1 },
+  { q: 'Choose the most professional way to push back on a tight deadline:', type: 'mcq', cat: 'Communication', diff: 'B2', options: ['"That\'s impossible, we can\'t do it."', '"I understand the urgency, but given the current workload, I\'d recommend we either adjust the scope or extend the timeline by one week."', '"We\'ll try our best but no promises."', '"You should ask someone else."'], correct: 1 },
+  { q: 'What is the difference between "deployment" and "release"?', type: 'mcq', cat: 'Vocabulaire', diff: 'B2', options: ['They mean exactly the same thing', 'Deployment is putting code on a server; release is making it available to users', 'Release is for mobile apps; deployment is for websites', 'Deployment is done by PM; release by developers'], correct: 1 },
+  { q: 'You\'re in a meeting and someone says: "Let\'s take this offline." What do they mean?', type: 'mcq', cat: 'Communication', diff: 'B2', options: ['They want to disconnect from the internet', 'They suggest discussing this topic separately, outside the current meeting', 'They want to cancel the meeting', 'They want to write it down on paper'], correct: 1 },
+  { q: 'Rewrite this sentence more professionally: "The agency messed up the homepage and now everything is broken."', type: 'open', cat: 'Rédaction', diff: 'B2-C1', context: 'You\'re writing to your manager about an issue with your external development agency.' },
+  { q: 'A client asks: "Why is the project behind schedule?" Write a professional response explaining the delay.', type: 'open', cat: 'Communication', diff: 'B2-C1', context: 'The delay is due to unexpected API integration issues with the payment provider. You\'re 5 days behind.' },
+  { q: '"The team\'s velocity has been inconsistent _____ the last three sprints, which suggests we need to _____ our estimation process."', type: 'mcq', cat: 'Vocabulaire', diff: 'C1', options: ['during / revisit', 'over / revisit', 'across / review', 'over / reconsider'], correct: 1 },
+  { q: 'Choose the sentence that best uses a hedging strategy in a business context:', type: 'mcq', cat: 'Communication', diff: 'C1', options: ['"The results will definitely improve next quarter."', '"Based on current trends, we might reasonably expect to see an improvement in the coming quarter."', '"I think maybe it could possibly get better."', '"Results are going to be fine."'], correct: 1 },
+  { q: 'Write a brief meeting opening (2-3 sentences) for a sprint retrospective with your international team.', type: 'open', cat: 'Réunions', diff: 'C1', context: 'Your team includes developers in London, a designer in Berlin, and a QA lead in Lisbon. The last sprint was challenging.' },
+  { q: 'What does "technical debt" mean and why should a project manager care about it? Explain briefly.', type: 'open', cat: 'Vocabulaire', diff: 'B2-C1', context: 'Imagine you\'re explaining this to a non-technical stakeholder.' },
+  { q: '"We should _____ the impact of the proposed changes on the existing user journey _____ committing to the new design."', type: 'mcq', cat: 'Grammaire', diff: 'C1-C2', options: ['assess / before', 'evaluate / prior to', 'measure / ahead of', 'All are grammatically correct'], correct: 3 },
+  { q: 'Write a short email (3-4 sentences) to your development agency asking them to prioritize a critical hotfix over the current sprint work.', type: 'open', cat: 'Rédaction', diff: 'C1-C2', context: 'The bug is on the payment page — customers can\'t complete orders on mobile.' },
+];
+
+const MEETING_TYPES = [
+  { title: 'Ouvrir une réunion', phrases: [
+    { en: "Let's get started. Thanks everyone for joining.", fr: "Commençons. Merci à tous d'être là." },
+    { en: "The purpose of today's meeting is to…", fr: "L'objectif de la réunion d'aujourd'hui est de…" },
+    { en: "I'd like to go through the agenda quickly.", fr: "Je voudrais parcourir l'ordre du jour rapidement." },
+    { en: "Before we dive in, any updates from last time?", fr: "Avant de commencer, des nouvelles depuis la dernière fois ?" },
+  ]},
+  { title: 'Présenter un projet', phrases: [
+    { en: "Let me walk you through the current status.", fr: "Laissez-moi vous présenter l'état actuel." },
+    { en: "As you can see on this slide…", fr: "Comme vous pouvez le voir sur ce slide…" },
+    { en: "We're on track to deliver by…", fr: "Nous sommes en bonne voie pour livrer d'ici…" },
+    { en: "The main blocker right now is…", fr: "Le principal point bloquant actuellement est…" },
+  ]},
+  { title: 'Défendre un point de vue', phrases: [
+    { en: "I understand your concern, but I'd argue that…", fr: "Je comprends votre préoccupation, mais je dirais que…" },
+    { en: "Based on the data, the best approach would be…", fr: "Sur la base des données, la meilleure approche serait…" },
+    { en: "I'd like to push back on that — here's why.", fr: "Je ne suis pas d'accord — voici pourquoi." },
+    { en: "Let me offer an alternative perspective.", fr: "Permettez-moi d'offrir une perspective différente." },
+  ]},
+  { title: 'Gérer les échanges', phrases: [
+    { en: "Could you elaborate on that?", fr: "Pourriez-vous développer ?" },
+    { en: "Just to clarify — are you saying that…?", fr: "Juste pour clarifier — vous dites que… ?" },
+    { en: "Let's take this offline and circle back.", fr: "Traitons ça en dehors de la réunion et revenons-y." },
+    { en: "Let's move on to the next item.", fr: "Passons au point suivant." },
+  ]},
+  { title: 'Conclure une réunion', phrases: [
+    { en: "Let me quickly recap the key takeaways.", fr: "Laissez-moi résumer les points clés." },
+    { en: "The action items are as follows…", fr: "Les actions à mener sont les suivantes…" },
+    { en: "I'll send out the meeting notes by end of day.", fr: "J'enverrai le compte-rendu avant la fin de journée." },
+    { en: "Thanks everyone — talk to you next week.", fr: "Merci à tous — à la semaine prochaine." },
+  ]},
+];
+
+const SCENARIOS = [
+  { id: 'standup', title: 'Daily Standup', desc: 'Participez à un daily standup avec votre équipe produit.', icon: '▲', diff: 'Intermédiaire', duration: '~5 min' },
+  { id: 'client', title: 'Client Call', desc: 'Présentez l\'avancement d\'un projet e-commerce à un client anglophone.', icon: '●', diff: 'Avancé', duration: '~10 min' },
+  { id: 'sprint', title: 'Sprint Planning', desc: 'Animez une session de sprint planning avec votre équipe.', icon: '◆', diff: 'Intermédiaire', duration: '~10 min' },
+  { id: 'agency', title: 'Brief agence', desc: 'Briefez une agence de développement sur un nouveau projet.', icon: '■', diff: 'Avancé', duration: '~10 min' },
+  { id: 'retro', title: 'Rétrospective', desc: 'Participez à une rétro d\'équipe en anglais.', icon: '◻', diff: 'Intermédiaire', duration: '~8 min' },
+  { id: 'interview', title: 'Entretien d\'embauche', desc: 'Préparez-vous pour un entretien en anglais.', icon: '★', diff: 'Avancé', duration: '~15 min' },
+];
+
+const EMAIL_SCENARIOS = [
+  { id: 'followup', title: 'Relance prestataire', desc: 'Relancez une agence en retard sur un livrable.' },
+  { id: 'status', title: 'Point d\'avancement', desc: 'Envoyez un status update à votre manager.' },
+  { id: 'bug', title: 'Signalement de bug', desc: 'Signalez un bug critique à l\'équipe technique.' },
+  { id: 'intro', title: 'Prise de contact', desc: 'Présentez-vous à une nouvelle équipe internationale.' },
+  { id: 'recap', title: 'Compte-rendu de réunion', desc: 'Rédigez un meeting recap après un sprint review.' },
+];
+
+function ls(key, fallback) {
+  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
+  catch { return fallback; }
+}
+function lsSet(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+
+const state = {
+  page: ls('ep_level', null) ? 'dashboard' : 'test',
+  testPhase: ls('ep_level', null) ? 'done' : 'idle',
+  testIndex: 0,
+  testAnswers: [],
+  testOpenAnswer: '',
+  testResult: ls('ep_test_result', null),
+  userLevel: ls('ep_level', null),
+  vocabCat: 'all',
+  cardIndex: 0,
+  flipped: false,
+  learnedWords: ls('ep_learned', []),
+  hardWords: ls('ep_hard', []),
+  wordsLearned: ls('ep_learned', []).length,
+  conversationCount: ls('ep_convos', 0),
+  emailsWritten: ls('ep_emails', 0),
+  simsCompleted: ls('ep_sims', 0),
+};
+
+function navigate(page) {
+  if (!state.userLevel && ['vocab','chat','sim','email','meeting','dashboard'].includes(page) && page !== 'test') {
+    state.page = 'gate';
+    state.gateTo = page;
+  } else {
+    state.page = page;
+  }
+  if (page === 'vocab') { state.cardIndex = 0; state.flipped = false; }
+  render();
+  document.getElementById('main').scrollTop = 0;
+}
+
+function getFilteredVocab() {
+  if (state.vocabCat === 'all') return VOCAB;
+  const map = { pm: 'Gestion de projet', ecom: 'E-commerce', tech: 'Tech' };
+  return VOCAB.filter(w => w.cat === map[state.vocabCat]);
+}
+
+function calculateLevel(answers) {
+  let score = 0;
+  answers.forEach((a, i) => {
+    const q = TEST_QUESTIONS[i];
+    if (q.type === 'mcq') {
+      if (a === q.correct) score++;
+    } else if (typeof a === 'string' && a.trim().split(/\s+/).length >= 10) {
+      score += 0.8;
+    } else if (typeof a === 'string' && a.trim().length > 0) {
+      score += 0.4;
+    }
+  });
+  const pct = score / TEST_QUESTIONS.length;
+  const mcqCorrect = answers.reduce((n, a, i) => TEST_QUESTIONS[i].type === 'mcq' && a === TEST_QUESTIONS[i].correct ? n + 1 : n, 0);
+  const mcqTotal = TEST_QUESTIONS.filter(q => q.type === 'mcq').length;
+
+  let level, labelFR;
+  if (pct >= 0.92) { level = 'C2'; labelFR = 'Maîtrise'; }
+  else if (pct >= 0.78) { level = 'C1'; labelFR = 'Avancé'; }
+  else if (pct >= 0.60) { level = 'B2'; labelFR = 'Intermédiaire avancé'; }
+  else if (pct >= 0.42) { level = 'B1'; labelFR = 'Intermédiaire'; }
+  else if (pct >= 0.22) { level = 'A2'; labelFR = 'Élémentaire'; }
+  else { level = 'A1'; labelFR = 'Débutant'; }
+
+  const analyses = {
+    C2: `Excellent ! Vous avez obtenu ${mcqCorrect}/${mcqTotal} aux QCM. Votre maîtrise de l'anglais professionnel est remarquable. Vous utilisez un vocabulaire précis et varié, avec des structures grammaticales complexes. Continuez à pratiquer pour maintenir ce niveau d'excellence.`,
+    C1: `Très bon résultat avec ${mcqCorrect}/${mcqTotal} aux QCM. Vous maîtrisez l'anglais professionnel avec aisance. Votre vocabulaire métier est solide et vous savez communiquer avec nuance. Quelques points de perfectionnement restent possibles, notamment sur les formulations les plus avancées.`,
+    B2: `Bon résultat avec ${mcqCorrect}/${mcqTotal} aux QCM. Vous pouvez participer à la plupart des situations professionnelles en anglais. Votre vocabulaire métier est correct mais pourrait être enrichi. Travaillez les structures complexes et les formulations diplomatiques pour passer au niveau supérieur.`,
+    B1: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. Vous avez des bases solides en anglais professionnel. Vous comprenez les termes courants mais certaines expressions métier vous échappent encore. Concentrez-vous sur le vocabulaire spécifique e-commerce/digital et la pratique orale.`,
+    A2: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. Vous avez des notions d'anglais mais le vocabulaire professionnel reste à construire. Commencez par les termes les plus fréquents de votre métier et pratiquez des échanges simples avant de passer aux situations complexes.`,
+    A1: `Score de ${mcqCorrect}/${mcqTotal} aux QCM. L'anglais professionnel est encore un territoire à explorer. Pas d'inquiétude : avec un programme adapté, les progrès seront rapides. Commencez par le vocabulaire de base et les expressions essentielles du quotidien professionnel.`,
+  };
+
+  return {
+    level, labelFR,
+    score: `${mcqCorrect}/${mcqTotal} aux QCM`,
+    analysis: analyses[level],
+  };
+}
+
+function selectAnswer(i) {
+  state.testAnswers[state.testIndex] = i;
+  render();
+  setTimeout(() => {
+    if (state.testIndex < TEST_QUESTIONS.length - 1) {
+      state.testIndex++;
+      render();
+    } else {
+      finishTest();
+    }
+  }, 400);
+}
+
+function submitOpenAnswer() {
+  if (!state.testOpenAnswer.trim()) return;
+  state.testAnswers[state.testIndex] = state.testOpenAnswer;
+  if (state.testIndex < TEST_QUESTIONS.length - 1) {
+    state.testIndex++;
+    state.testOpenAnswer = '';
+    render();
+  } else {
+    finishTest();
+  }
+}
+
+function finishTest() {
+  const result = calculateLevel(state.testAnswers);
+  state.testResult = result;
+  state.userLevel = result.level;
+  state.testPhase = 'done';
+  lsSet('ep_level', result.level);
+  lsSet('ep_test_result', result);
+  render();
+}
+
+function retakeTest() {
+  state.testPhase = 'idle';
+  state.testIndex = 0;
+  state.testAnswers = [];
+  state.testOpenAnswer = '';
+  state.testResult = null;
+  state.userLevel = null;
+  try { localStorage.removeItem('ep_level'); localStorage.removeItem('ep_test_result'); } catch {}
+  render();
+}
+
+function flipCard() { state.flipped = !state.flipped; render(); }
+function nextCard() {
+  const filtered = getFilteredVocab();
+  state.cardIndex = (state.cardIndex + 1) % filtered.length;
+  state.flipped = false;
+  render();
+}
+function markEasy() {
+  const filtered = getFilteredVocab();
+  const w = filtered[state.cardIndex % filtered.length].en;
+  if (!state.learnedWords.includes(w)) {
+    state.learnedWords.push(w);
+    state.wordsLearned = state.learnedWords.length;
+    lsSet('ep_learned', state.learnedWords);
+  }
+  nextCard();
+}
+function markHard() {
+  const filtered = getFilteredVocab();
+  const w = filtered[state.cardIndex % filtered.length].en;
+  if (!state.hardWords.includes(w)) {
+    state.hardWords.push(w);
+    lsSet('ep_hard', state.hardWords);
+  }
+  nextCard();
+}
+function setVocabCat(cat) { state.vocabCat = cat; state.cardIndex = 0; state.flipped = false; render(); }
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderSidebar() {
+  const items = [
+    { id: 'test', icon: '✦', label: 'Test de niveau' },
+    { id: 'dashboard', icon: '◻', label: 'Dashboard' },
+    { id: 'vocab', icon: '◆', label: 'Vocabulaire' },
+    { id: 'chat', icon: '●', label: 'Conversation' },
+    { id: 'sim', icon: '▲', label: 'Simulations' },
+    { id: 'email', icon: '✉', label: 'Emails' },
+    { id: 'meeting', icon: '■', label: 'Réunions' },
+  ];
+  const tr = state.testResult;
+  const levelText = tr ? `${tr.level} — ${tr.labelFR}` : 'Non évalué';
+  const progressPct = Math.min(100, (state.learnedWords.length / VOCAB.length) * 100);
+
+  document.getElementById('sidebar').innerHTML = `
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">E</div>
+      <span class="sidebar-logo-text">EngagePro</span>
+    </div>
+    <div class="sidebar-nav">
+      ${items.map(it => `
+        <button class="nav-item ${state.page === it.id ? 'active' : ''}" onclick="navigate('${it.id}')">
+          <span class="nav-item-icon">${it.icon}</span> ${it.label}
+        </button>
+      `).join('')}
+    </div>
+    <div class="sidebar-level">
+      <p class="sidebar-level-label">Niveau actuel</p>
+      <p class="sidebar-level-value">${esc(levelText)}</p>
+      <div class="sidebar-level-bar"><div class="sidebar-level-fill" style="width:${progressPct}%"></div></div>
+    </div>
+    <a href="/" class="sidebar-back">← Retour au site</a>
+  `;
+
+  const mobileItems = [
+    { id: 'dashboard', icon: '◻', label: 'Accueil' },
+    { id: 'vocab', icon: '◆', label: 'Vocab' },
+    { id: 'test', icon: '✦', label: 'Test' },
+    { id: 'meeting', icon: '■', label: 'Réunions' },
+    { id: 'sim', icon: '▲', label: 'Plus' },
+  ];
+  document.getElementById('mobile-nav').innerHTML = mobileItems.map(it => `
+    <button class="mobile-nav-item ${state.page === it.id ? 'active' : ''}" onclick="navigate('${it.id}')">
+      <span>${it.icon}</span>${it.label}
+    </button>
+  `).join('');
+}
+
+function renderMain() {
+  const p = state.page;
+  let html = '';
+  if (p === 'gate') html = renderGate();
+  else if (p === 'test') html = renderTest();
+  else if (p === 'dashboard') html = renderDashboard();
+  else if (p === 'vocab') html = renderVocabPage();
+  else if (p === 'meeting') html = renderMeetings();
+  else if (p === 'chat') html = renderComingSoon('Conversation IA', '●', 'Discutez en anglais avec un tuteur IA qui corrige vos erreurs en temps réel. Pratiquez le vocabulaire métier dans des échanges naturels et recevez un feedback instantané sur votre grammaire et vos formulations.');
+  else if (p === 'sim') html = renderSimPage();
+  else if (p === 'email') html = renderEmailPage();
+  document.getElementById('main').innerHTML = html;
+}
+
+function renderGate() {
+  return `<div class="gate-screen">
+    <div class="gate-icon">✦</div>
+    <h2 style="font-size:24px;font-weight:800;margin-bottom:10px;">Commencez par le test de niveau</h2>
+    <p style="font-size:16px;color:var(--slate);line-height:1.6;margin-bottom:28px;">Pour adapter les exercices à votre niveau, passez d'abord le test d'évaluation. Ça prend environ 10 minutes.</p>
+    <button class="btn btn-primary" onclick="navigate('test')">Passer le test</button>
+  </div>`;
+}
+
+function renderTest() {
+  if (state.testPhase === 'idle') {
+    return `<div style="max-width:640px;margin:0 auto;text-align:center;padding:60px 0;">
+      <div class="gate-icon" style="margin:0 auto 28px;">✦</div>
+      <h2 style="font-size:24px;font-weight:800;margin-bottom:12px;">Évaluez votre niveau d'anglais professionnel</h2>
+      <p style="font-size:16px;color:var(--slate);line-height:1.7;margin-bottom:12px;">Ce test comporte 20 questions adaptées au contexte e-commerce et gestion de projet digital : vocabulaire métier, compréhension, grammaire appliquée et rédaction.</p>
+      <p style="font-size:15px;color:var(--slate);line-height:1.7;margin-bottom:36px;">À la fin, vous recevrez votre niveau CECRL (A1 à C2) avec une analyse de vos forces et axes d'amélioration.</p>
+      <button class="btn btn-primary" onclick="state.testPhase='inprogress';state.testIndex=0;state.testAnswers=[];state.testOpenAnswer='';render();">Commencer le test</button>
+    </div>`;
+  }
+  if (state.testPhase === 'inprogress') {
+    const q = TEST_QUESTIONS[state.testIndex];
+    const pct = ((state.testIndex) / TEST_QUESTIONS.length * 100).toFixed(0);
+    let body = '';
+    if (q.type === 'mcq') {
+      body = `<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;">
+        ${q.options.map((opt, i) => `<button class="test-option ${state.testAnswers[state.testIndex] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">${esc(opt)}</button>`).join('')}
+      </div>`;
+    } else {
+      body = `<div style="margin-top:20px;">
+        ${q.context ? `<p style="font-size:15px;color:var(--slate);line-height:1.6;margin-bottom:16px;font-style:italic;">${esc(q.context)}</p>` : ''}
+        <textarea class="test-textarea" placeholder="Write your answer in English…" oninput="state.testOpenAnswer=this.value">${esc(state.testOpenAnswer)}</textarea>
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="submitOpenAnswer()">Valider</button>
+      </div>`;
+    }
+    return `<div class="page-header"><h1 class="page-title">Test de niveau</h1><p class="page-subtitle">Évaluez votre anglais professionnel en 20 questions</p></div>
+      <div style="max-width:680px;margin:0 auto;">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:32px;">
+          <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <span style="font-size:14px;font-weight:700;color:var(--slate);white-space:nowrap;">${state.testIndex + 1} / ${TEST_QUESTIONS.length}</span>
+        </div>
+        <div class="test-card">
+          <div style="display:flex;gap:8px;margin-bottom:20px;">
+            <span class="tag tag-coral">${esc(q.cat)}</span>
+            <span class="tag tag-muted">${esc(q.diff)}</span>
+          </div>
+          <h3 style="font-size:20px;font-weight:800;line-height:1.4;margin-bottom:8px;">${esc(q.q)}</h3>
+          ${body}
+        </div>
+      </div>`;
+  }
+  if (state.testPhase === 'done' && state.testResult) {
+    const r = state.testResult;
+    return `<div class="page-header"><h1 class="page-title">Test de niveau</h1></div>
+      <div style="max-width:680px;margin:0 auto;">
+        <div class="test-result-hero">
+          <p style="font-size:14px;color:rgba(255,255,255,0.5);font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;position:relative;">Votre niveau</p>
+          <p class="test-result-level">${esc(r.level)}</p>
+          <p class="test-result-label">${esc(r.labelFR)}</p>
+          <p class="test-result-score">${esc(r.score)}</p>
+        </div>
+        <div class="card" style="margin-bottom:24px;cursor:default;" onmouseenter="" onmouseleave="">
+          <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">Analyse</h3>
+          <p style="font-size:15px;line-height:1.8;color:var(--navy);">${esc(r.analysis)}</p>
+        </div>
+        <div style="display:flex;gap:12px;">
+          <button class="btn btn-primary" style="flex:1;" onclick="navigate('dashboard')">Commencer la formation</button>
+          <button class="btn btn-outline" onclick="retakeTest()">Repasser le test</button>
+        </div>
+      </div>`;
+  }
+  return '';
+}
+
+function renderDashboard() {
+  return `<div>
+    <div style="margin-bottom:40px;">
+      <h1 style="font-size:32px;font-weight:900;margin-bottom:8px;">Bonjour 👋</h1>
+      <p style="font-size:17px;color:var(--slate);">Prête à progresser en anglais professionnel aujourd'hui ?</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><p class="stat-label">Mots appris</p><p class="stat-value">${state.wordsLearned}</p></div>
+      <div class="stat-card"><p class="stat-label">Conversations</p><p class="stat-value">${state.conversationCount}</p></div>
+      <div class="stat-card"><p class="stat-label">Emails rédigés</p><p class="stat-value">${state.emailsWritten}</p></div>
+      <div class="stat-card"><p class="stat-label">Simulations</p><p class="stat-value">${state.simsCompleted}</p></div>
+    </div>
+    <h2 style="font-size:20px;font-weight:800;margin-bottom:20px;">Continuer l'apprentissage</h2>
+    <div class="card-grid">
+      <div class="card" style="cursor:pointer;" onclick="navigate('vocab')">
+        <div class="card-icon">◆</div>
+        <h3 class="card-title">Vocabulaire e-commerce & digital</h3>
+        <p class="card-desc">Flashcards, quiz et exercices sur le vocabulaire métier.</p>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="navigate('chat')">
+        <div class="card-icon">●</div>
+        <h3 class="card-title">Conversation libre</h3>
+        <p class="card-desc">Discutez en anglais avec un agent IA qui corrige vos erreurs.</p>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="navigate('sim')">
+        <div class="card-icon">▲</div>
+        <h3 class="card-title">Simulations pro</h3>
+        <p class="card-desc">Daily standup, call client, sprint review… en conditions réelles.</p>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="navigate('email')">
+        <div class="card-icon">✉</div>
+        <h3 class="card-title">Rédaction d'emails</h3>
+        <p class="card-desc">Apprenez à rédiger des emails pros clairs et efficaces.</p>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="navigate('meeting')">
+        <div class="card-icon">■</div>
+        <h3 class="card-title">Réunions & présentations</h3>
+        <p class="card-desc">Structurez et animez vos réunions en anglais.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderVocabPage() {
+  const filtered = getFilteredVocab();
+  const card = filtered[state.cardIndex % filtered.length] || VOCAB[0];
+  const cats = [
+    { id: 'all', label: 'Tous' }, { id: 'pm', label: 'Gestion de projet' },
+    { id: 'ecom', label: 'E-commerce' }, { id: 'tech', label: 'Tech' },
+  ];
+  const front = !state.flipped;
+  const cardContent = front
+    ? `<p class="flashcard-cat">${esc(card.cat)}</p><p class="flashcard-en">${esc(card.en)}</p><p class="flashcard-hint">Cliquez pour voir la traduction</p>`
+    : `<p class="flashcard-cat">${esc(card.cat)}</p><p class="flashcard-en" style="font-size:28px;">${esc(card.en)}</p><p class="flashcard-fr">${esc(card.fr)}</p><p class="flashcard-example">${esc(card.example)}</p>`;
+
+  return `<div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+      <div><h1 class="page-title">Vocabulaire métier</h1><p class="page-subtitle">E-commerce, gestion de projet, digital</p></div>
+      <div class="filter-bar">
+        ${cats.map(c => `<button class="filter-btn ${state.vocabCat === c.id ? 'active' : ''}" onclick="setVocabCat('${c.id}')">${c.label}</button>`).join('')}
+      </div>
+    </div>
+    <div style="max-width:600px;margin:0 auto 40px;">
+      <div class="flashcard" onclick="flipCard()">${cardContent}</div>
+      <div class="flashcard-actions">
+        <button class="btn btn-sm btn-hard" onclick="markHard()">À revoir</button>
+        <button class="btn btn-sm btn-easy" onclick="markEasy()">Je connais</button>
+        <button class="btn btn-sm btn-primary" onclick="nextCard()">Suivant →</button>
+      </div>
+      <p class="flashcard-progress">${(state.cardIndex % filtered.length) + 1} / ${filtered.length}</p>
+    </div>
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:16px;">Liste complète</h2>
+    <div class="vocab-grid">
+      ${filtered.map(w => `<div class="vocab-item"><div><p class="vocab-en">${esc(w.en)}</p><p class="vocab-fr">${esc(w.fr)}</p></div><span class="tag tag-coral" style="white-space:nowrap;">${esc(w.cat)}</span></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderMeetings() {
+  return `<div>
+    <div class="page-header"><h1 class="page-title">Réunions & Présentations</h1><p class="page-subtitle">Apprenez les structures et le vocabulaire clé</p></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;">
+      ${MEETING_TYPES.map(mt => `<div class="meeting-card">
+        <h3>${esc(mt.title)}</h3>
+        ${mt.phrases.map(ph => `<div class="meeting-phrase"><p class="meeting-phrase-en">${esc(ph.en)}</p><p class="meeting-phrase-fr">${esc(ph.fr)}</p></div>`).join('')}
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderSimPage() {
+  return `<div>
+    <div class="page-header"><h1 class="page-title">Simulations professionnelles</h1><p class="page-subtitle">Entraînez-vous dans des situations réelles</p></div>
+    <div class="card-grid">
+      ${SCENARIOS.map(s => `<div class="card" style="cursor:default;">
+        <div class="card-icon">${s.icon}</div>
+        <h3 class="card-title">${esc(s.title)}</h3>
+        <p class="card-desc">${esc(s.desc)}</p>
+        <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;">
+          <span class="tag tag-muted">${esc(s.diff)}</span>
+          <span class="tag tag-muted">${esc(s.duration)}</span>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="coming-soon" style="margin-top:40px;">
+      <div class="coming-soon-icon">▲</div>
+      <h2>Simulations IA interactives</h2>
+      <p>Les simulations en temps réel avec un agent IA (daily standup, call client, sprint planning…) seront disponibles prochainement avec la connexion au serveur IA.</p>
+      <span class="tag tag-coral">Prochainement</span>
+    </div>
+  </div>`;
+}
+
+function renderEmailPage() {
+  return `<div>
+    <div class="page-header"><h1 class="page-title">Rédaction d'emails</h1><p class="page-subtitle">Choisissez un scénario et rédigez votre email</p></div>
+    <div class="card-grid">
+      ${EMAIL_SCENARIOS.map(es => `<div class="card" style="cursor:default;">
+        <h3 class="card-title">${esc(es.title)}</h3>
+        <p class="card-desc">${esc(es.desc)}</p>
+      </div>`).join('')}
+    </div>
+    <div class="coming-soon" style="margin-top:40px;">
+      <div class="coming-soon-icon">✉</div>
+      <h2>Correction IA d'emails</h2>
+      <p>La rédaction d'emails avec feedback IA instantané (correction, suggestions, score) sera disponible prochainement avec la connexion au serveur IA.</p>
+      <span class="tag tag-coral">Prochainement</span>
+    </div>
+  </div>`;
+}
+
+function renderComingSoon(title, icon, desc) {
+  return `<div class="page-header"><h1 class="page-title">${esc(title)}</h1></div>
+    <div class="coming-soon">
+      <div class="coming-soon-icon">${icon}</div>
+      <h2>${esc(title)}</h2>
+      <p>${esc(desc)}</p>
+      <span class="tag tag-coral">Prochainement</span>
+    </div>`;
+}
+
+function render() {
+  renderSidebar();
+  renderMain();
+}
+
+render();
+</script>
+</body>
+</html>
